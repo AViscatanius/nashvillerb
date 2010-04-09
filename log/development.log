@@ -1,0 +1,2060 @@
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (21.3ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (3.9ms)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (4.0ms)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateActivitiesTable (20080401000000)
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mCREATE TABLE "activities" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "site_id" integer, "section_id" integer, "author_id" integer, "author_type" varchar(255), "author_name" varchar(40), "author_email" varchar(40), "author_homepage" varchar(255), "actions" varchar(255), "object_id" integer, "object_type" varchar(15), "object_attributes" text, "created_at" datetime NOT NULL) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000000')[0m
+Migrating to CreateSitesTable (20080401000001)
+  [4;35;1mSQL (0.6ms)[0m   [0mCREATE TABLE "sites" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "host" varchar(255), "title" varchar(255), "subtitle" varchar(255), "email" varchar(255), "timezone" varchar(255), "theme_names" varchar(255), "ping_urls" text, "akismet_key" varchar(100), "akismet_url" varchar(255), "approve_comments" boolean, "comment_age" integer, "comment_filter" varchar(255), "search_path" varchar(255), "tag_path" varchar(255), "tag_layout" varchar(255), "permalink_style" varchar(255), "permissions" text) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000001')[0m
+Migrating to CreateSectionsTable (20080401000002)
+  [4;35;1mSQL (1.3ms)[0m   [0mCREATE TABLE "sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "type" varchar(255), "site_id" integer, "parent_id" integer, "lft" integer DEFAULT 0 NOT NULL, "rgt" integer DEFAULT 0 NOT NULL, "path" varchar(255), "permalink" varchar(255), "title" varchar(255), "layout" varchar(255), "template" varchar(255), "options" text, "contents_count" integer, "comment_age" integer, "content_filter" varchar(255), "permissions" text) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000002')[0m
+Migrating to CreateContentsTable (20080401000003)
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mCREATE TABLE "contents" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "site_id" integer, "section_id" integer, "type" varchar(20), "position" integer, "permalink" varchar(255), "excerpt_html" text, "body_html" text, "author_id" integer, "author_type" varchar(255), "author_name" varchar(40), "author_email" varchar(40), "author_homepage" varchar(255), "version" integer, "filter" varchar(255), "comment_age" integer DEFAULT 0, "cached_tag_list" varchar(255), "assets_count" integer DEFAULT 0, "published_at" datetime, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mCREATE TABLE "content_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content_id" integer, "locale" varchar(255), "version" integer, "current" boolean, "excerpt" text, "body" text, "title" varchar(255), "excerpt_html" text, "body_html" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000003')[0m
+Migrating to CreateCategoriesTable (20080401000004)
+  [4;35;1mSQL (0.8ms)[0m   [0mCREATE TABLE "categories" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "section_id" integer, "parent_id" integer, "lft" integer DEFAULT 0 NOT NULL, "rgt" integer DEFAULT 0 NOT NULL, "title" varchar(255), "path" varchar(255), "permalink" varchar(255)) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000004')[0m
+Migrating to CreateCategoryAssignments (20080401000005)
+  [4;35;1mSQL (6.6ms)[0m   [0mCREATE TABLE "category_assignments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content_id" integer, "category_id" integer) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000005')[0m
+Migrating to CreateTaggableTables (20080401000006)
+  [4;35;1mSQL (0.5ms)[0m   [0mCREATE TABLE "tags" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255)) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mCREATE TABLE "taggings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "tag_id" integer, "taggable_id" integer, "taggable_type" varchar(255), "created_at" datetime) [0m
+  [4;35;1mSQL (0.6ms)[0m   [0mCREATE INDEX "index_taggings_on_tag_id" ON "taggings" ("tag_id")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mCREATE INDEX "index_taggings_on_taggable_id_and_taggable_type" ON "taggings" ("taggable_id", "taggable_type")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080401000006')[0m
+Migrating to CreateCommentsTable (20080401000007)
+  [4;36;1mSQL (0.8ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mCREATE TABLE "comments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "site_id" integer, "section_id" integer, "commentable_id" integer, "commentable_type" varchar(255), "author_id" integer, "author_type" varchar(255), "author_name" varchar(40), "author_email" varchar(40), "author_homepage" varchar(255), "body" text, "body_html" text, "approved" integer DEFAULT 0 NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000007')[0m
+Migrating to CreateCachedPageReferences (20080401000020)
+  [4;35;1mSQL (1.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mCREATE TABLE "cached_page_references" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "cached_page_id" integer, "object_id" integer, "object_type" varchar(255), "method" varchar(255)) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080401000020')[0m
+Migrating to CreateCachedPages (20080401000021)
+  [4;36;1mSQL (3.1ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mCREATE TABLE "cached_pages" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "site_id" integer, "section_id" integer, "url" varchar(255), "updated_at" datetime, "cleared_at" datetime) [0m
+  [4;36;1mSQL (2.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000021')[0m
+Migrating to CreateUsersTable (20080402000001)
+  [4;35;1mSQL (0.8ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar(40), "last_name" varchar(40), "email" varchar(100), "homepage" varchar(255), "about" varchar(255), "signature" varchar(255), "password_hash" varchar(40), "password_salt" varchar(40), "ip" varchar(255), "agent" varchar(255), "referer" varchar(255), "remember_me" varchar(40), "token_key" varchar(40), "token_expiration" datetime, "anonymous" boolean DEFAULT 'f', "created_at" datetime, "updated_at" datetime, "verified_at" datetime, "deleted_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080402000001')[0m
+Migrating to CreateMembershipsTable (20080402000005)
+  [4;35;1mSQL (0.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mCREATE TABLE "memberships" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "site_id" integer, "user_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080402000005')[0m
+Migrating to CreateRoleTables (20080402000006)
+  [4;36;1mSQL (0.5ms)[0m   [0;1mCREATE TABLE "roles" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "context_id" integer, "context_type" varchar(255), "type" varchar(25)) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080402000006')[0m
+Migrating to CreateCountersTable (20080601194338)
+  [4;36;1mSQL (1.0ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mCREATE TABLE "counters" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "owner_id" integer, "owner_type" varchar(255), "name" varchar(25), "count" integer DEFAULT 0) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080601194338')[0m
+Migrating to CreatePluginConfigs (20080710000000)
+  [4;35;1mSQL (1.0ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mCREATE TABLE "plugin_configs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "site_id" integer, "name" varchar(255), "options" text) [0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080710000000')[0m
+Migrating to PluginOwnerColumn (20080715131051)
+  [4;36;1mSQL (3.0ms)[0m   [0;1mCREATE TEMPORARY TABLE "altered_plugin_configs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "site_id" integer, "name" varchar(255), "options" text) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("plugin_configs")[0m
+  [4;36;1mSQL (2.9ms)[0m   [0;1mDROP TABLE "plugin_configs"[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mCREATE TABLE "plugin_configs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "options" text) [0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mPRAGMA index_list("altered_plugin_configs")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mDROP TABLE "altered_plugin_configs"[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mALTER TABLE "plugin_configs" ADD "owner_id" integer[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mALTER TABLE "plugin_configs" ADD "owner_type" varchar(255)[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080715131051')[0m
+Migrating to AddCommentBoardId (20080721141112)
+  [4;35;1mSQL (1.8ms)[0m   [0mALTER TABLE "comments" ADD "board_id" integer[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080721141112')[0m
+Migrating to AddContentTypeToJoinTables (20081208161500)
+  [4;35;1mSQL (0.6ms)[0m   [0mALTER TABLE "category_assignments" ADD "content_type" varchar(255)[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mUPDATE category_assignments SET content_type = (SELECT type from contents WHERE contents.id = category_assignments.content_id)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081208161500')[0m
+Migrating to RenameCategoryAssignmentToCategorization (20090216114034)
+  [4;36;1mSQL (2.7ms)[0m   [0;1mALTER TABLE category_assignments RENAME TO categorizations[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mCREATE TEMPORARY TABLE "altered_categorizations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content_id" integer, "category_id" integer, "categorizable_type" varchar(255)) [0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mPRAGMA index_list("categorizations")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mDROP TABLE "categorizations"[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mCREATE TABLE "categorizations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "content_id" integer, "category_id" integer, "categorizable_type" varchar(255)) [0m
+  [4;35;1mSQL (0.0ms)[0m   [0mPRAGMA index_list("altered_categorizations")[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mDROP TABLE "altered_categorizations"[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mCREATE TEMPORARY TABLE "altered_categorizations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "categorizable_id" integer, "category_id" integer, "categorizable_type" varchar(255)) [0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mPRAGMA index_list("categorizations")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mDROP TABLE "categorizations"[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mCREATE TABLE "categorizations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "categorizable_id" integer, "category_id" integer, "categorizable_type" varchar(255)) [0m
+  [4;35;1mSQL (0.0ms)[0m   [0mPRAGMA index_list("altered_categorizations")[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mDROP TABLE "altered_categorizations"[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090216114034')[0m
+Migrating to MoveSectionsToPages (20090305123429)
+  [4;36;1mSection Update (1.4ms)[0m   [0;1mUPDATE "sections" SET type = 'Page' WHERE (type = 'Section' OR type IS NULL) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090305123429')[0m
+Migrating to AddPublishedAtToSections (20090519132700)
+  [4;36;1mSQL (1.3ms)[0m   [0;1mALTER TABLE "sections" ADD "published_at" datetime[0m
+  [4;35;1mSection Load (0.9ms)[0m   [0mSELECT * FROM "sections" ORDER BY lft[0m
+  [4;36;1mSQL (5.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090519132700')[0m
+Migrating to CreateAccounts (20090625124502)
+  [4;35;1mSQL (0.6ms)[0m   [0mCREATE TABLE "accounts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090625124502')[0m
+Migrating to AddAccountToUser (20090625133231)
+  [4;35;1mSQL (0.6ms)[0m   [0mALTER TABLE "users" ADD "account_id" integer[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mCREATE INDEX "index_users_on_account_id" ON "users" ("account_id")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090625133231')[0m
+Migrating to CreateSectionTranslations (20090702085459)
+  [4;36;1mSQL (0.6ms)[0m   [0;1mCREATE TABLE "section_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "section_id" integer, "locale" varchar(255), "title" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mCREATE INDEX "index_section_translations_on_section_id" ON "section_translations" ("section_id")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090702085459')[0m
+Migrating to CreateCategoryTranslations (20090702200226)
+  [4;35;1mSQL (0.6ms)[0m   [0mCREATE TABLE "category_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "category_id" integer, "locale" varchar(255), "title" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mCREATE INDEX "index_category_translations_on_category_id" ON "category_translations" ("category_id")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090702200226')[0m
+Migrating to UpgradePaperclipPaths (20090707171100)
+  [4;36;1mSite Load (0.2ms)[0m   [0;1mSELECT * FROM "sites" [0m
+  [4;35;1mSQL (0.5ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090707171100')[0m
+Migrating to AddEmailNotificationToSite (20090709111934)
+  [4;36;1mSQL (0.6ms)[0m   [0;1mALTER TABLE "sites" ADD "email_notification" boolean DEFAULT 'f'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090709111934')[0m
+Migrating to MigrateRolesTableToNewRbac (20090720132900)
+  [4;36;1mSQL (0.3ms)[0m   [0;1mCREATE TEMPORARY TABLE "altered_roles" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "context_id" integer, "context_type" varchar(255), "name" varchar(25)) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("roles")[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mDROP TABLE "roles"[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mCREATE TABLE "roles" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "context_id" integer, "context_type" varchar(255), "name" varchar(25)) [0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mPRAGMA index_list("altered_roles")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mDROP TABLE "altered_roles"[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mALTER TABLE "roles" ADD "ancestor_context_id" integer[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mALTER TABLE "roles" ADD "ancestor_context_type" varchar(255)[0m
+  [4;36;1mRbac::Role Load (0.1ms)[0m   [0;1mSELECT * FROM "roles" [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090720132900')[0m
+Migrating to AddTimestampsToSections (20100215123034)
+  [4;36;1mSQL (0.6ms)[0m   [0;1mALTER TABLE "sections" ADD "created_at" datetime[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mALTER TABLE "sections" ADD "updated_at" datetime[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100215123034')[0m
+Migrating to AddIndexesForPageCachingTables (20100302135500)
+  [4;35;1mSQL (2.9ms)[0m   [0mCREATE INDEX "index_cached_pages_on_site_id_and_url" ON "cached_pages" ("site_id", "url")[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mCREATE INDEX "index_cached_page_references_on_object_id_and_object_type" ON "cached_page_references" ("object_id", "object_type")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100302135500')[0m
+Migrating to AddLocaleToSite (20100318122325)
+  [4;36;1mSQL (0.6ms)[0m   [0;1mALTER TABLE "sites" ADD "locale" varchar(255)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100318122325')[0m
+Migrating to AddIndicesToContentsAndSections (20100323090000)
+  [4;36;1mSQL (0.7ms)[0m   [0;1mCREATE INDEX "index_content_translations_on_content_id" ON "content_translations" ("content_id")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mCREATE INDEX "index_contents_on_section_id" ON "contents" ("section_id")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mCREATE INDEX "index_sections_on_parent_id" ON "sections" ("parent_id")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100323090000')[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.5ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("accounts")[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("activities")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("cached_page_references")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_info('index_cached_page_references_on_object_id_and_object_type')[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mPRAGMA index_list("cached_pages")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_info('index_cached_pages_on_site_id_and_url')[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mPRAGMA index_list("categories")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("categorizations")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("category_translations")[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_info('index_category_translations_on_category_id')[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("comments")[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mPRAGMA index_list("content_translations")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_info('index_content_translations_on_content_id')[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("contents")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_info('index_contents_on_section_id')[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("counters")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("memberships")[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("plugin_configs")[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("roles")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("section_translations")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_info('index_section_translations_on_section_id')[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("sections")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_info('index_sections_on_parent_id')[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("sites")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mPRAGMA index_list("taggings")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_info('index_taggings_on_taggable_id_and_taggable_type')[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_info('index_taggings_on_tag_id')[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("tags")[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mPRAGMA index_list("users")[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_info('index_users_on_account_id')[0m
+  [4;36;1mSQL (43.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (0.0ms)[0m   [0mMysql::Error: Table 'democms.sites' doesn't exist: SHOW FIELDS FROM `sites`[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-03-31 15:57:49) [GET]
+
+ActiveRecord::StatementInvalid (Mysql::Error: Table 'democms.sites' doesn't exist: SHOW FIELDS FROM `sites`):
+  vendor/plugins/adva_cms/app/models/site.rb:40:in `find_by_host!'
+
+Rendered rescues/_trace (37.0ms)
+Rendered rescues/_request_and_response (14.1ms)
+Rendering rescues/layout (internal_server_error)
+  [4;36;1mSQL (42.6ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (43.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (172.0ms)[0m   [0;1mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+  [4;35;1mSQL (143.5ms)[0m   [0mCREATE UNIQUE INDEX `unique_schema_migrations` ON `schema_migrations` (`version`)[0m
+  [4;36;1mSQL (44.0ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (40.5ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateActivitiesTable (20080401000000)
+  [4;36;1mSQL (43.1ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (104.1ms)[0m   [0mCREATE TABLE `activities` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `author_id` int(11), `author_type` varchar(255), `author_name` varchar(40), `author_email` varchar(40), `author_homepage` varchar(255), `actions` varchar(255), `object_id` int(11), `object_type` varchar(15), `object_attributes` text, `created_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [4;36;1mSQL (56.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000000')[0m
+Migrating to CreateSitesTable (20080401000001)
+  [4;35;1mSQL (98.9ms)[0m   [0mCREATE TABLE `sites` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `host` varchar(255), `title` varchar(255), `subtitle` varchar(255), `email` varchar(255), `timezone` varchar(255), `theme_names` varchar(255), `ping_urls` text, `akismet_key` varchar(100), `akismet_url` varchar(255), `approve_comments` tinyint(1), `comment_age` int(11), `comment_filter` varchar(255), `search_path` varchar(255), `tag_path` varchar(255), `tag_layout` varchar(255), `permalink_style` varchar(255), `permissions` text) ENGINE=InnoDB[0m
+  [4;36;1mSQL (54.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000001')[0m
+Migrating to CreateSectionsTable (20080401000002)
+  [4;35;1mSQL (95.6ms)[0m   [0mCREATE TABLE `sections` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `type` varchar(255), `site_id` int(11), `parent_id` int(11), `lft` int(11) DEFAULT 0 NOT NULL, `rgt` int(11) DEFAULT 0 NOT NULL, `path` varchar(255), `permalink` varchar(255), `title` varchar(255), `layout` varchar(255), `template` varchar(255), `options` text, `contents_count` int(11), `comment_age` int(11), `content_filter` varchar(255), `permissions` text) ENGINE=InnoDB[0m
+  [4;36;1mSQL (51.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000002')[0m
+Migrating to CreateContentsTable (20080401000003)
+  [4;35;1mSQL (38.6ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (101.5ms)[0m   [0;1mCREATE TABLE `contents` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `type` varchar(20), `position` int(11), `permalink` varchar(255), `excerpt_html` text, `body_html` text, `author_id` int(11), `author_type` varchar(255), `author_name` varchar(40), `author_email` varchar(40), `author_homepage` varchar(255), `version` int(11), `filter` varchar(255), `comment_age` int(11) DEFAULT 0, `cached_tag_list` varchar(255), `assets_count` int(11) DEFAULT 0, `published_at` datetime, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (93.5ms)[0m   [0mCREATE TABLE `content_translations` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `content_id` int(11), `locale` varchar(255), `version` int(11), `current` tinyint(1), `excerpt_html` text, `body_html` text, `body` text, `title` varchar(255), `excerpt` text, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (51.0ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000003')[0m
+Migrating to CreateCategoriesTable (20080401000004)
+  [4;35;1mSQL (106.8ms)[0m   [0mCREATE TABLE `categories` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `section_id` int(11), `parent_id` int(11), `lft` int(11) DEFAULT 0 NOT NULL, `rgt` int(11) DEFAULT 0 NOT NULL, `title` varchar(255), `path` varchar(255), `permalink` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (59.0ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000004')[0m
+Migrating to CreateCategoryAssignments (20080401000005)
+  [4;35;1mSQL (115.2ms)[0m   [0mCREATE TABLE `category_assignments` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `content_id` int(11), `category_id` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (54.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000005')[0m
+Migrating to CreateTaggableTables (20080401000006)
+  [4;35;1mSQL (103.7ms)[0m   [0mCREATE TABLE `tags` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (97.6ms)[0m   [0;1mCREATE TABLE `taggings` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `tag_id` int(11), `taggable_id` int(11), `taggable_type` varchar(255), `created_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (151.2ms)[0m   [0mCREATE INDEX `index_taggings_on_tag_id` ON `taggings` (`tag_id`)[0m
+  [4;36;1mSQL (151.5ms)[0m   [0;1mCREATE INDEX `index_taggings_on_taggable_id_and_taggable_type` ON `taggings` (`taggable_id`, `taggable_type`)[0m
+  [4;35;1mSQL (54.9ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080401000006')[0m
+Migrating to CreateCommentsTable (20080401000007)
+  [4;36;1mSQL (40.1ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (108.8ms)[0m   [0mCREATE TABLE `comments` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `commentable_id` int(11), `commentable_type` varchar(255), `author_id` int(11), `author_type` varchar(255), `author_name` varchar(40), `author_email` varchar(40), `author_homepage` varchar(255), `body` text, `body_html` text, `approved` int(11) DEFAULT 0 NOT NULL, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (50.9ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000007')[0m
+Migrating to CreateCachedPageReferences (20080401000020)
+  [4;35;1mSQL (39.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (116.3ms)[0m   [0;1mCREATE TABLE `cached_page_references` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `cached_page_id` int(11), `object_id` int(11), `object_type` varchar(255), `method` varchar(255)) ENGINE=InnoDB[0m
+  [4;35;1mSQL (54.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080401000020')[0m
+Migrating to CreateCachedPages (20080401000021)
+  [4;36;1mSQL (40.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (116.1ms)[0m   [0mCREATE TABLE `cached_pages` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `url` varchar(255), `updated_at` datetime, `cleared_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (58.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000021')[0m
+Migrating to CreateUsersTable (20080402000001)
+  [4;35;1mSQL (115.9ms)[0m   [0mCREATE TABLE `users` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `first_name` varchar(40), `last_name` varchar(40), `email` varchar(100), `homepage` varchar(255), `about` varchar(255), `signature` varchar(255), `password_hash` varchar(40), `password_salt` varchar(40), `ip` varchar(255), `agent` varchar(255), `referer` varchar(255), `remember_me` varchar(40), `token_key` varchar(40), `token_expiration` datetime, `anonymous` tinyint(1) DEFAULT 0, `created_at` datetime, `updated_at` datetime, `verified_at` datetime, `deleted_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (50.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080402000001')[0m
+Migrating to CreateMembershipsTable (20080402000005)
+  [4;35;1mSQL (38.7ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (112.1ms)[0m   [0;1mCREATE TABLE `memberships` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `user_id` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (47.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080402000005')[0m
+Migrating to CreateRoleTables (20080402000006)
+  [4;36;1mSQL (105.9ms)[0m   [0;1mCREATE TABLE `roles` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `user_id` int(11), `context_id` int(11), `context_type` varchar(255), `type` varchar(25)) ENGINE=InnoDB[0m
+  [4;35;1mSQL (50.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080402000006')[0m
+Migrating to CreateCountersTable (20080601194338)
+  [4;36;1mSQL (47.8ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (111.5ms)[0m   [0mCREATE TABLE `counters` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `owner_id` int(11), `owner_type` varchar(255), `name` varchar(25), `count` int(11) DEFAULT 0) ENGINE=InnoDB[0m
+  [4;36;1mSQL (50.0ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080601194338')[0m
+Migrating to CreatePluginConfigs (20080710000000)
+  [4;35;1mSQL (43.2ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (115.8ms)[0m   [0;1mCREATE TABLE `plugin_configs` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `name` varchar(255), `options` text) ENGINE=InnoDB[0m
+  [4;35;1mSQL (51.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080710000000')[0m
+Migrating to PluginOwnerColumn (20080715131051)
+  [4;36;1mSQL (135.2ms)[0m   [0;1mALTER TABLE `plugin_configs` DROP `site_id`[0m
+  [4;35;1mSQL (115.9ms)[0m   [0mALTER TABLE `plugin_configs` ADD `owner_id` int(11)[0m
+  [4;36;1mSQL (122.8ms)[0m   [0;1mALTER TABLE `plugin_configs` ADD `owner_type` varchar(255)[0m
+  [4;35;1mSQL (54.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080715131051')[0m
+Migrating to AddCommentBoardId (20080721141112)
+  [4;36;1mSQL (132.8ms)[0m   [0;1mALTER TABLE `comments` ADD `board_id` int(11)[0m
+  [4;35;1mSQL (513.2ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080721141112')[0m
+Migrating to AddContentTypeToJoinTables (20081208161500)
+  [4;36;1mSQL (128.4ms)[0m   [0;1mALTER TABLE `category_assignments` ADD `content_type` varchar(255)[0m
+  [4;35;1mSQL (43.6ms)[0m   [0mUPDATE category_assignments SET content_type = (SELECT type from contents WHERE contents.id = category_assignments.content_id)[0m
+  [4;36;1mSQL (47.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081208161500')[0m
+Migrating to RenameCategoryAssignmentToCategorization (20090216114034)
+  [4;35;1mSQL (43.0ms)[0m   [0mRENAME TABLE `category_assignments` TO `categorizations`[0m
+  [4;36;1mSQL (42.9ms)[0m   [0;1mSHOW FIELDS FROM `categorizations`[0m
+  [4;35;1mSQL (42.7ms)[0m   [0mSHOW COLUMNS FROM `categorizations` LIKE 'content_type'[0m
+  [4;36;1mSQL (86.6ms)[0m   [0;1mALTER TABLE `categorizations` CHANGE `content_type` `categorizable_type` varchar(255) DEFAULT NULL[0m
+  [4;35;1mSQL (45.0ms)[0m   [0mSHOW FIELDS FROM `categorizations`[0m
+  [4;36;1mSQL (43.8ms)[0m   [0;1mSHOW COLUMNS FROM `categorizations` LIKE 'content_id'[0m
+  [4;35;1mSQL (62.2ms)[0m   [0mALTER TABLE `categorizations` CHANGE `content_id` `categorizable_id` int(11) DEFAULT NULL[0m
+  [4;36;1mSQL (59.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090216114034')[0m
+Migrating to MoveSectionsToPages (20090305123429)
+  [4;35;1mSection Update (39.0ms)[0m   [0mUPDATE `sections` SET type = 'Page' WHERE (type = 'Section' OR type IS NULL) [0m
+  [4;36;1mSQL (48.6ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090305123429')[0m
+Migrating to AddPublishedAtToSections (20090519132700)
+  [4;35;1mSQL (138.3ms)[0m   [0mALTER TABLE `sections` ADD `published_at` datetime[0m
+  [4;36;1mSection Load (42.8ms)[0m   [0;1mSELECT * FROM `sections` ORDER BY lft[0m
+  [4;35;1mSQL (55.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090519132700')[0m
+Migrating to CreateAccounts (20090625124502)
+  [4;36;1mSQL (114.8ms)[0m   [0;1mCREATE TABLE `accounts` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (47.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090625124502')[0m
+Migrating to AddAccountToUser (20090625133231)
+  [4;36;1mSQL (147.7ms)[0m   [0;1mALTER TABLE `users` ADD `account_id` int(11)[0m
+  [4;35;1mSQL (151.4ms)[0m   [0mCREATE INDEX `index_users_on_account_id` ON `users` (`account_id`)[0m
+  [4;36;1mSQL (63.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090625133231')[0m
+Migrating to CreateSectionTranslations (20090702085459)
+  [4;35;1mSQL (90.7ms)[0m   [0mCREATE TABLE `section_translations` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `section_id` int(11), `locale` varchar(255), `title` varchar(255), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (127.4ms)[0m   [0;1mCREATE INDEX `index_section_translations_on_section_id` ON `section_translations` (`section_id`)[0m
+  [4;35;1mSQL (52.2ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090702085459')[0m
+Migrating to CreateCategoryTranslations (20090702200226)
+  [4;36;1mSQL (103.8ms)[0m   [0;1mCREATE TABLE `category_translations` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `category_id` int(11), `locale` varchar(255), `title` varchar(255), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (150.7ms)[0m   [0mCREATE INDEX `index_category_translations_on_category_id` ON `category_translations` (`category_id`)[0m
+  [4;36;1mSQL (56.0ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090702200226')[0m
+Migrating to UpgradePaperclipPaths (20090707171100)
+  [4;35;1mSite Load (39.0ms)[0m   [0mSELECT * FROM `sites` [0m
+  [4;36;1mSQL (48.0ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090707171100')[0m
+Migrating to AddEmailNotificationToSite (20090709111934)
+  [4;35;1mSQL (139.5ms)[0m   [0mALTER TABLE `sites` ADD `email_notification` tinyint(1) DEFAULT 0[0m
+  [4;36;1mSQL (50.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090709111934')[0m
+Migrating to MigrateRolesTableToNewRbac (20090720132900)
+  [4;35;1mSQL (46.3ms)[0m   [0mSHOW FIELDS FROM `roles`[0m
+  [4;36;1mSQL (44.5ms)[0m   [0;1mSHOW COLUMNS FROM `roles` LIKE 'type'[0m
+  [4;35;1mSQL (59.7ms)[0m   [0mALTER TABLE `roles` CHANGE `type` `name` varchar(25) DEFAULT NULL[0m
+  [4;36;1mSQL (142.3ms)[0m   [0;1mALTER TABLE `roles` ADD `ancestor_context_id` int(11)[0m
+  [4;35;1mSQL (139.3ms)[0m   [0mALTER TABLE `roles` ADD `ancestor_context_type` varchar(255)[0m
+  [4;36;1mRbac::Role Load (44.0ms)[0m   [0;1mSELECT * FROM `roles` [0m
+  [4;35;1mSQL (50.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090720132900')[0m
+Migrating to AddTimestampsToSections (20100215123034)
+  [4;36;1mSQL (135.5ms)[0m   [0;1mALTER TABLE `sections` ADD `created_at` datetime[0m
+  [4;35;1mSQL (131.3ms)[0m   [0mALTER TABLE `sections` ADD `updated_at` datetime[0m
+  [4;36;1mSQL (54.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100215123034')[0m
+Migrating to AddIndexesForPageCachingTables (20100302135500)
+  [4;35;1mSQL (156.3ms)[0m   [0mCREATE INDEX `index_cached_pages_on_site_id_and_url` ON `cached_pages` (`site_id`, `url`)[0m
+  [4;36;1mSQL (723.6ms)[0m   [0;1mCREATE INDEX `index_cached_page_references_on_object_id_and_object_type` ON `cached_page_references` (`object_id`, `object_type`)[0m
+  [4;35;1mSQL (53.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100302135500')[0m
+Migrating to AddLocaleToSite (20100318122325)
+  [4;36;1mSQL (131.2ms)[0m   [0;1mALTER TABLE `sites` ADD `locale` varchar(255)[0m
+  [4;35;1mSQL (51.2ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100318122325')[0m
+Migrating to AddIndicesToContentsAndSections (20100323090000)
+  [4;36;1mSQL (647.6ms)[0m   [0;1mCREATE INDEX `index_content_translations_on_content_id` ON `content_translations` (`content_id`)[0m
+  [4;35;1mSQL (130.4ms)[0m   [0mCREATE INDEX `index_contents_on_section_id` ON `contents` (`section_id`)[0m
+  [4;36;1mSQL (595.7ms)[0m   [0;1mCREATE INDEX `index_sections_on_parent_id` ON `sections` (`parent_id`)[0m
+  [4;35;1mSQL (59.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100323090000')[0m
+  [4;36;1mSQL (38.7ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (42.8ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (43.9ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (44.4ms)[0m   [0mSHOW FIELDS FROM `accounts`[0m
+  [4;36;1mSQL (44.6ms)[0m   [0;1mdescribe `accounts`[0m
+  [4;35;1mSQL (42.6ms)[0m   [0mSHOW KEYS FROM `accounts`[0m
+  [4;36;1mSQL (45.7ms)[0m   [0;1mSHOW FIELDS FROM `activities`[0m
+  [4;35;1mSQL (42.6ms)[0m   [0mdescribe `activities`[0m
+  [4;36;1mSQL (43.9ms)[0m   [0;1mSHOW KEYS FROM `activities`[0m
+  [4;35;1mSQL (43.2ms)[0m   [0mSHOW FIELDS FROM `cached_page_references`[0m
+  [4;36;1mSQL (42.5ms)[0m   [0;1mdescribe `cached_page_references`[0m
+  [4;35;1mSQL (42.8ms)[0m   [0mSHOW KEYS FROM `cached_page_references`[0m
+  [4;36;1mSQL (43.7ms)[0m   [0;1mSHOW FIELDS FROM `cached_pages`[0m
+  [4;35;1mSQL (44.3ms)[0m   [0mdescribe `cached_pages`[0m
+  [4;36;1mSQL (45.5ms)[0m   [0;1mSHOW KEYS FROM `cached_pages`[0m
+  [4;35;1mSQL (45.3ms)[0m   [0mSHOW FIELDS FROM `categories`[0m
+  [4;36;1mSQL (44.6ms)[0m   [0;1mdescribe `categories`[0m
+  [4;35;1mSQL (41.5ms)[0m   [0mSHOW KEYS FROM `categories`[0m
+  [4;36;1mSQL (43.5ms)[0m   [0;1mSHOW FIELDS FROM `categorizations`[0m
+  [4;35;1mSQL (43.0ms)[0m   [0mdescribe `categorizations`[0m
+  [4;36;1mSQL (54.5ms)[0m   [0;1mSHOW KEYS FROM `categorizations`[0m
+  [4;35;1mSQL (44.0ms)[0m   [0mSHOW FIELDS FROM `category_translations`[0m
+  [4;36;1mSQL (44.4ms)[0m   [0;1mdescribe `category_translations`[0m
+  [4;35;1mSQL (42.7ms)[0m   [0mSHOW KEYS FROM `category_translations`[0m
+  [4;36;1mSQL (43.5ms)[0m   [0;1mSHOW FIELDS FROM `comments`[0m
+  [4;35;1mSQL (45.1ms)[0m   [0mdescribe `comments`[0m
+  [4;36;1mSQL (48.9ms)[0m   [0;1mSHOW KEYS FROM `comments`[0m
+  [4;35;1mSQL (44.1ms)[0m   [0mSHOW FIELDS FROM `content_translations`[0m
+  [4;36;1mSQL (44.0ms)[0m   [0;1mdescribe `content_translations`[0m
+  [4;35;1mSQL (42.6ms)[0m   [0mSHOW KEYS FROM `content_translations`[0m
+  [4;36;1mSQL (45.5ms)[0m   [0;1mSHOW FIELDS FROM `contents`[0m
+  [4;35;1mSQL (44.8ms)[0m   [0mdescribe `contents`[0m
+  [4;36;1mSQL (41.8ms)[0m   [0;1mSHOW KEYS FROM `contents`[0m
+  [4;35;1mSQL (43.9ms)[0m   [0mSHOW FIELDS FROM `counters`[0m
+  [4;36;1mSQL (44.4ms)[0m   [0;1mdescribe `counters`[0m
+  [4;35;1mSQL (42.8ms)[0m   [0mSHOW KEYS FROM `counters`[0m
+  [4;36;1mSQL (43.0ms)[0m   [0;1mSHOW FIELDS FROM `memberships`[0m
+  [4;35;1mSQL (42.5ms)[0m   [0mdescribe `memberships`[0m
+  [4;36;1mSQL (42.5ms)[0m   [0;1mSHOW KEYS FROM `memberships`[0m
+  [4;35;1mSQL (42.8ms)[0m   [0mSHOW FIELDS FROM `plugin_configs`[0m
+  [4;36;1mSQL (45.6ms)[0m   [0;1mdescribe `plugin_configs`[0m
+  [4;35;1mSQL (42.0ms)[0m   [0mSHOW KEYS FROM `plugin_configs`[0m
+  [4;36;1mSQL (46.1ms)[0m   [0;1mSHOW FIELDS FROM `roles`[0m
+  [4;35;1mSQL (42.0ms)[0m   [0mdescribe `roles`[0m
+  [4;36;1mSQL (42.8ms)[0m   [0;1mSHOW KEYS FROM `roles`[0m
+  [4;35;1mSQL (43.5ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mSQL (44.6ms)[0m   [0;1mdescribe `section_translations`[0m
+  [4;35;1mSQL (42.5ms)[0m   [0mSHOW KEYS FROM `section_translations`[0m
+  [4;36;1mSQL (43.5ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mSQL (44.6ms)[0m   [0mdescribe `sections`[0m
+  [4;36;1mSQL (41.5ms)[0m   [0;1mSHOW KEYS FROM `sections`[0m
+  [4;35;1mSQL (44.0ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (45.1ms)[0m   [0;1mdescribe `sites`[0m
+  [4;35;1mSQL (41.9ms)[0m   [0mSHOW KEYS FROM `sites`[0m
+  [4;36;1mSQL (43.3ms)[0m   [0;1mSHOW FIELDS FROM `taggings`[0m
+  [4;35;1mSQL (42.9ms)[0m   [0mdescribe `taggings`[0m
+  [4;36;1mSQL (43.0ms)[0m   [0;1mSHOW KEYS FROM `taggings`[0m
+  [4;35;1mSQL (42.9ms)[0m   [0mSHOW FIELDS FROM `tags`[0m
+  [4;36;1mSQL (43.1ms)[0m   [0;1mdescribe `tags`[0m
+  [4;35;1mSQL (44.5ms)[0m   [0mSHOW KEYS FROM `tags`[0m
+  [4;36;1mSQL (43.6ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mSQL (44.0ms)[0m   [0mdescribe `users`[0m
+  [4;36;1mSQL (41.3ms)[0m   [0;1mSHOW KEYS FROM `users`[0m
+  [4;36;1mSQL (42.7ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (43.3ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (40.5ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (43.6ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`host` = 'localhost:3000') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`host` = 'localhost:3000') LIMIT 1[0m
+
+
+Processing Admin::InstallController#index (for 127.0.0.1 at 2010-03-31 15:58:29) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/install"}
+  [4;36;1mSite Load (40.0ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mUser Load (43.6ms)[0m   [0mSELECT * FROM `users` LIMIT 1[0m
+  [4;36;1mPage Columns (40.7ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+WARNING: Can't mass-assign these protected attributes: type
+  [4;35;1mUser Columns (38.7ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+Rendering template within layouts/simple
+Rendering admin/install/index
+Rendered shared/_flash (1.4ms)
+Completed in 446ms (View: 176, DB: 333) | 200 OK [http://localhost/]
+  [4;36;1mSQL (45.7ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (45.9ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (45.1ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (45.3ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`host` = 'localhost:3000') LIMIT 1[0m
+
+
+Processing Admin::InstallController#index (for 127.0.0.1 at 2010-03-31 15:59:07) [POST]
+  Parameters: {"user"=>{"password"=>"[FILTERED]", "email"=>"will@cogwisesolutions.com"}, "commit"=>"Create site & account »", "action"=>"index", "authenticity_token"=>"YdkNDRJpfez/z/LMT6Tzgxd5xuNwZw6DrVrCh980Axo=", "controller"=>"admin/install", "site"=>{"name"=>"Test Website"}, "section"=>{"title"=>"Home", "type"=>"Blog"}}
+  [4;36;1mSite Load (41.5ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mUser Load (47.4ms)[0m   [0mSELECT * FROM `users` LIMIT 1[0m
+  [4;36;1mBlog Columns (45.8ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+WARNING: Can't mass-assign these protected attributes: type
+  [4;35;1mUser Columns (41.5ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mBlog Load (46.9ms)[0m   [0;1mSELECT * FROM `sections` WHERE (permalink LIKE 'home%' and site_id is null and parent_id is null) AND ( (`sections`.`type` = 'Blog' ) ) ORDER BY lft[0m
+  [4;35;1mSection Columns (45.0ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mSection Load (45.0ms)[0m   [0;1mSELECT `sections`.id FROM `sections` WHERE (`sections`.`permalink` = BINARY 'home' AND `sections`.site_id IS NULL AND `sections`.parent_id IS NULL) LIMIT 1[0m
+  [4;35;1mSite Load (44.5ms)[0m   [0mSELECT `sites`.id FROM `sites` WHERE (`sites`.`host` = BINARY 'localhost:3000') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (permalink LIKE 'home%' and site_id is null and parent_id is null) AND ( (`sections`.`type` = 'Blog' ) ) ORDER BY lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT `sections`.id FROM `sections` WHERE (`sections`.`permalink` = BINARY 'home' AND `sections`.site_id IS NULL AND `sections`.parent_id IS NULL) LIMIT 1[0m
+  [4;36;1mUser Load (41.6ms)[0m   [0;1mSELECT `users`.id FROM `users` WHERE (`users`.`email` = BINARY 'will@cogwisesolutions.com') LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (permalink LIKE 'home%' and site_id is null and parent_id is null) AND ( (`sections`.`type` = 'Blog' ) ) ORDER BY lft[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT `sections`.id FROM `sections` WHERE (`sections`.`permalink` = BINARY 'home' AND `sections`.site_id IS NULL AND `sections`.parent_id IS NULL) LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT `sites`.id FROM `sites` WHERE (`sites`.`host` = BINARY 'localhost:3000') LIMIT 1[0m
+  [4;36;1mSite Create (65.6ms)[0m   [0;1mINSERT INTO `sites` (`name`, `title`, `akismet_url`, `timezone`, `tag_path`, `email_notification`, `subtitle`, `approve_comments`, `comment_filter`, `search_path`, `theme_names`, `permalink_style`, `host`, `akismet_key`, `tag_layout`, `permissions`, `locale`, `comment_age`, `email`, `ping_urls`) VALUES('Test Website', 'Test Website', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'localhost:3000', NULL, NULL, NULL, NULL, NULL, NULL, NULL)[0m
+  [4;35;1mBlog Load (45.2ms)[0m   [0mSELECT * FROM `sections` WHERE (permalink LIKE 'home%' and site_id = 1 and parent_id is null) AND ( (`sections`.`type` = 'Blog' ) ) ORDER BY lft[0m
+  [4;36;1mSection Load (43.5ms)[0m   [0;1mSELECT `sections`.id FROM `sections` WHERE (`sections`.`permalink` = BINARY 'home' AND `sections`.site_id = 1 AND `sections`.parent_id IS NULL) LIMIT 1[0m
+  [4;35;1mSection Load (45.0ms)[0m   [0mSELECT * FROM `sections` WHERE ((lft < 0 AND rgt > 0) AND (`sections`.`site_id` = 1)) ORDER BY lft[0m
+  [4;36;1mSQL (44.9ms)[0m   [0;1mSELECT max(`sections`.rgt) AS max_rgt FROM `sections` WHERE (`sections`.`site_id` = 1) [0m
+  [4;35;1mBlog Create (50.9ms)[0m   [0mINSERT INTO `sections` (`permalink`, `site_id`, `options`, `content_filter`, `updated_at`, `title`, `contents_count`, `type`, `lft`, `template`, `permissions`, `published_at`, `parent_id`, `rgt`, `path`, `comment_age`, `layout`, `created_at`) VALUES('home', 1, '--- {}\n\n', NULL, '2010-03-31 20:59:08', 'Home', NULL, 'Blog', 1, NULL, NULL, '2010-03-31 20:59:08', NULL, 2, 'home', -1, NULL, '2010-03-31 20:59:08')[0m
+  [4;36;1mSQL (44.6ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSectionTranslation Columns (45.5ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mSectionTranslation Load (44.5ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.`locale` = 'en') AND (`section_translations`.section_id = 1) LIMIT 1[0m
+  [4;35;1mSectionTranslation Create (44.7ms)[0m   [0mINSERT INTO `section_translations` (`updated_at`, `title`, `section_id`, `locale`, `created_at`) VALUES('2010-03-31 20:59:08', 'Home', 1, 'en', '2010-03-31 20:59:08')[0m
+  [4;36;1mSQL (50.7ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mUser Create (47.5ms)[0m   [0mINSERT INTO `users` (`updated_at`, `signature`, `account_id`, `token_key`, `verified_at`, `deleted_at`, `password_salt`, `about`, `referer`, `anonymous`, `homepage`, `password_hash`, `ip`, `first_name`, `last_name`, `agent`, `email`, `remember_me`, `token_expiration`, `created_at`) VALUES('2010-03-31 20:59:08', NULL, NULL, NULL, '2010-03-31 20:59:08', NULL, '69ef5f2371a0a299606d884f830d3f7d3f73921c', NULL, NULL, 0, NULL, 'ab76c538e51256d67147faaaf6bdf4db4799f0cd', NULL, 'will', NULL, NULL, 'will@cogwisesolutions.com', NULL, NULL, '2010-03-31 20:59:08')[0m
+  [4;36;1mRbac::Role Columns (45.9ms)[0m   [0;1mSHOW FIELDS FROM `roles`[0m
+  [4;35;1mRbac::Role Create (52.1ms)[0m   [0mINSERT INTO `roles` (`context_id`, `name`, `context_type`, `ancestor_context_type`, `ancestor_context_id`, `user_id`) VALUES(NULL, 'superuser', NULL, NULL, NULL, 1)[0m
+  [4;36;1mUser Load (45.9ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`email` = 'will@cogwisesolutions.com') LIMIT 1[0m
+  [4;35;1mSQL (45.2ms)[0m   [0mSELECT count(*) AS count_all FROM `users` WHERE (id = 1 AND password_hash = 'ab76c538e51256d67147faaaf6bdf4db4799f0cd' AND verified_at IS NOT NULL) [0m
+  [4;36;1mSite Load (44.7ms)[0m   [0;1mSELECT `sites`.id FROM `sites` WHERE (`sites`.`host` = BINARY 'localhost:3000' AND `sites`.id <> 1) LIMIT 1[0m
+  [4;35;1mSite Update (56.2ms)[0m   [0mUPDATE `sites` SET `title` = 'Test Website', `host` = 'localhost:3000', `permissions` = NULL, `email` = 'will@cogwisesolutions.com', `name` = 'Test Website' WHERE `id` = 1[0m
+Rendering template within layouts/simple
+Rendering admin/install/confirmation
+Rendered shared/_flash (0.1ms)
+Completed in 1856ms (View: 33, DB: 1444) | 200 OK [http://localhost/admin/install]
+  [4;36;1mSQL (44.3ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (48.4ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (44.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (45.9ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (43.9ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSection Columns (45.7ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mBlog Columns (41.7ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::SitesController#show (for 127.0.0.1 at 2010-03-31 15:59:12) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mSite Load (41.6ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mUser Columns (51.3ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (41.6ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (47.2ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mMembership Columns (43.5ms)[0m   [0mSHOW FIELDS FROM `memberships`[0m
+  [4;36;1mUser Load Including Associations (45.8ms)[0m   [0;1mSELECT `users`.`id` AS t0_r0, `users`.`first_name` AS t0_r1, `users`.`last_name` AS t0_r2, `users`.`email` AS t0_r3, `users`.`homepage` AS t0_r4, `users`.`about` AS t0_r5, `users`.`signature` AS t0_r6, `users`.`password_hash` AS t0_r7, `users`.`password_salt` AS t0_r8, `users`.`ip` AS t0_r9, `users`.`agent` AS t0_r10, `users`.`referer` AS t0_r11, `users`.`remember_me` AS t0_r12, `users`.`token_key` AS t0_r13, `users`.`token_expiration` AS t0_r14, `users`.`anonymous` AS t0_r15, `users`.`created_at` AS t0_r16, `users`.`updated_at` AS t0_r17, `users`.`verified_at` AS t0_r18, `users`.`deleted_at` AS t0_r19, `users`.`account_id` AS t0_r20, `roles`.`id` AS t1_r0, `roles`.`user_id` AS t1_r1, `roles`.`context_id` AS t1_r2, `roles`.`context_type` AS t1_r3, `roles`.`name` AS t1_r4, `roles`.`ancestor_context_id` AS t1_r5, `roles`.`ancestor_context_type` AS t1_r6, `memberships`.`id` AS t2_r0, `memberships`.`site_id` AS t2_r1, `memberships`.`user_id` AS t2_r2, `memberships`.`created_at` AS t2_r3, `memberships`.`updated_at` AS t2_r4 FROM `users` LEFT OUTER JOIN `roles` ON roles.user_id = users.id LEFT OUTER JOIN `memberships` ON memberships.user_id = users.id WHERE (memberships.site_id = 1 OR (memberships.site_id IS NULL AND roles.name = 'superuser')) [0m
+  [4;35;1mComment Load (47.0ms)[0m   [0mSELECT * FROM `comments` WHERE (`comments`.site_id = 1 AND (comments.approved = 0)) ORDER BY comments.created_at, comments.id[0m
+  [4;36;1mActivity Load (46.4ms)[0m   [0;1mSELECT * FROM `activities` WHERE (`activities`.site_id = 1) ORDER BY activities.created_at DESC LIMIT 50[0m
+Rendering template within layouts/admin
+Rendering admin/sites/show
+Rendered admin/activities/_activities (30.2ms)
+Rendered admin/sites/_recent_users (9.2ms)
+Rendered admin/sites/_unapproved_comments (2.0ms)
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSectionTranslation Load (41.2ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;35;1mSectionTranslation Columns (44.8ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (8.9ms)
+Rendered shared/_flash (0.1ms)
+Completed in 741ms (View: 180, DB: 765) | 200 OK [http://localhost/admin/sites/1]
+  [4;35;1mSQL (46.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSite Columns (45.0ms)[0m   [0;1mSHOW FIELDS FROM `sites`[0m
+  [4;35;1mSQL (45.1ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mSite Load (45.5ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mSection Load (44.5ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSection Columns (48.0ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mBlog Columns (46.7ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::SectionsController#index (for 127.0.0.1 at 2010-03-31 15:59:20) [GET]
+  Parameters: {"site_id"=>"1"}
+  [4;36;1mSite Load (42.2ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mUser Columns (42.0ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (47.2ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mRbac::Role Load (41.3ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/sections/index
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mSection Load (41.6ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+  [4;36;1mSectionTranslation Load (43.5ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;35;1mSectionTranslation Columns (45.4ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+Rendered admin/shared/_header (6.0ms)
+Rendered shared/_flash (0.1ms)
+Completed in 452ms (View: 125, DB: 624) | 200 OK [http://localhost/admin/sites/1/sections]
+  [4;35;1mSQL (45.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSite Columns (46.0ms)[0m   [0;1mSHOW FIELDS FROM `sites`[0m
+  [4;35;1mSQL (41.8ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mSite Load (45.0ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mSection Load (46.8ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSection Columns (44.0ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mBlog Columns (42.6ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::CommentsController#index (for 127.0.0.1 at 2010-03-31 15:59:24) [GET]
+  Parameters: {"site_id"=>"1"}
+  [4;36;1mSite Load (43.3ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mUser Columns (43.9ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (46.9ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mRbac::Role Load (46.7ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mComment Load (43.8ms)[0m   [0mSELECT * FROM `comments` WHERE ((((commentable_type NOT IN ('Topic')) AND (`comments`.site_id = 1)) AND (`comments`.site_id = 1)) AND (((commentable_type NOT IN ('Topic')) AND (`comments`.site_id = 1)) AND (`comments`.site_id = 1))) ORDER BY created_at DESC, comments.created_at, comments.id LIMIT 0, 30[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/comments/index
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSectionTranslation Load (412.6ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;35;1mSectionTranslation Columns (46.0ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (10.4ms)
+Rendered shared/_flash (0.2ms)
+Completed in 848ms (View: 143, DB: 995) | 200 OK [http://localhost/admin/sites/1/comments]
+  [4;35;1mSQL (42.9ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSite Columns (46.4ms)[0m   [0;1mSHOW FIELDS FROM `sites`[0m
+  [4;35;1mSQL (40.2ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mSite Load (45.6ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mSection Load (43.8ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSection Columns (45.3ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mBlog Columns (40.7ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::SitesController#edit (for 127.0.0.1 at 2010-03-31 15:59:28) [GET]
+  Parameters: {"id"=>"1"}
+  [4;36;1mSite Load (40.2ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mUser Columns (44.4ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (43.1ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mRbac::Role Load (42.2ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/sites/edit
+Rendered admin/sites/_email_notifications (4.4ms)
+Rendered admin/sites/_comments_settings (3.8ms)
+Rendered admin/sites/_form (81.3ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSectionTranslation Load (41.1ms)[0m   [0mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;36;1mSectionTranslation Columns (45.8ms)[0m   [0;1mSHOW FIELDS FROM `section_translations`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (6.3ms)
+Rendered shared/_flash (0.2ms)
+Completed in 515ms (View: 241, DB: 562) | 200 OK [http://localhost/admin/sites/1/edit]
+  [4;36;1mSQL (43.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (43.2ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (39.4ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+Migrating to CreateActivitiesTable (20080401000000)
+Migrating to CreateSitesTable (20080401000001)
+Migrating to CreateSectionsTable (20080401000002)
+Migrating to CreateContentsTable (20080401000003)
+Migrating to CreateCategoriesTable (20080401000004)
+Migrating to CreateCategoryAssignments (20080401000005)
+Migrating to CreateTaggableTables (20080401000006)
+Migrating to CreateCommentsTable (20080401000007)
+Migrating to CreateForumTables (20080401000011)
+  [4;35;1mSQL (42.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (120.1ms)[0m   [0;1mCREATE TABLE `topics` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `title` varchar(255), `sticky` int(11) DEFAULT 0, `locked` tinyint(1) DEFAULT 0, `comments_count` int(11) DEFAULT 0, `hits` int(11) DEFAULT 0, `last_comment_id` int(11), `last_author_id` int(11), `last_author_type` varchar(255), `last_author_name` varchar(255), `permalink` varchar(255), `created_at` datetime, `updated_at` datetime, `last_updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (47.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080401000011')[0m
+Migrating to CreateCachedPageReferences (20080401000020)
+Migrating to CreateCachedPages (20080401000021)
+Migrating to CreateUsersTable (20080402000001)
+Migrating to CreateMembershipsTable (20080402000005)
+Migrating to CreateRoleTables (20080402000006)
+Migrating to CreateAssetsTable (20080429181111)
+  [4;36;1mSQL (38.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (106.1ms)[0m   [0mCREATE TABLE `asset_assignments` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `content_id` int(11), `asset_id` int(11), `position` int(11), `label` varchar(255), `created_at` datetime, `active` tinyint(1)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (43.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (126.2ms)[0m   [0mCREATE TABLE `assets` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `parent_id` int(11), `user_id` int(11), `content_type` varchar(255), `filename` varchar(255), `size` int(11), `thumbnail` varchar(255), `width` int(11), `height` int(11), `title` varchar(255), `thumbnails_count` int(11) DEFAULT 0, `created_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (46.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080429181111')[0m
+Migrating to CreateCountersTable (20080601194338)
+Migrating to RemovePosition (20080626111252)
+  [4;35;1mSQL (134.7ms)[0m   [0mALTER TABLE `asset_assignments` DROP `position`[0m
+  [4;36;1mSQL (55.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080626111252')[0m
+Migrating to CreatePluginConfigs (20080710000000)
+Migrating to AddSpamEngineToSite (20080712133231)
+  [4;35;1mSQL (142.4ms)[0m   [0mALTER TABLE `sites` ADD `spam_options` text[0m
+  [4;36;1mSQL (58.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080712133231')[0m
+Migrating to AddSpamInfoToComments (20080712154718)
+  [4;35;1mSQL (133.6ms)[0m   [0mALTER TABLE `comments` ADD `spaminess` text[0m
+  [4;36;1mSQL (63.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080712154718')[0m
+Migrating to SpamReportsTable (20080713161553)
+  [4;35;1mSQL (112.5ms)[0m   [0mCREATE TABLE `spam_reports` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `subject_id` int(11), `subject_type` varchar(255), `engine` varchar(255), `spaminess` float, `data` text) ENGINE=InnoDB[0m
+  [4;36;1mSQL (58.9ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080713161553')[0m
+Migrating to PluginOwnerColumn (20080715131051)
+Migrating to CreateBoardsTable (20080721115631)
+  [4;35;1mSQL (43.0ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (119.1ms)[0m   [0;1mCREATE TABLE `boards` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `title` varchar(255), `permalink` varchar(255), `description` text, `position` int(11), `last_comment_id` int(11), `last_author_id` int(11), `last_author_type` varchar(255), `last_author_name` varchar(255), `created_at` datetime, `updated_at` datetime, `last_updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (133.2ms)[0m   [0mALTER TABLE `topics` ADD `board_id` int(11)[0m
+  [4;36;1mSQL (47.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080721115631')[0m
+Migrating to AddCommentBoardId (20080721141112)
+Migrating to AddTopicAuthor (20080723181444)
+  [4;35;1mSQL (146.0ms)[0m   [0mALTER TABLE `topics` ADD `author_id` int(11)[0m
+  [4;36;1mSQL (151.4ms)[0m   [0;1mALTER TABLE `topics` ADD `author_type` varchar(255)[0m
+  [4;35;1mSQL (58.9ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080723181444')[0m
+Migrating to CreateCalendarEventsTable (20081125105510)
+  [4;36;1mSQL (39.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (156.1ms)[0m   [0mCREATE TABLE `calendar_events` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `title` varchar(255) NOT NULL, `permalink` varchar(255), `startdate` datetime NOT NULL, `enddate` datetime, `published_at` datetime, `host` varchar(255), `body` text, `body_html` text, `filter` varchar(255), `parent_id` int(11), `section_id` int(11), `user_id` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (167.3ms)[0m   [0;1mCREATE UNIQUE INDEX `index_calendar_events_on_permalink` ON `calendar_events` (`permalink`)[0m
+  [4;35;1mSQL (54.5ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081125105510')[0m
+Migrating to CreateNewsletters (20081127204401)
+  [4;36;1mSQL (47.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (119.0ms)[0m   [0mCREATE TABLE `newsletters` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `subscriptions_count` int(11) DEFAULT 0, `issues_count` int(11) DEFAULT 0, `title` varchar(255) NOT NULL, `desc` text, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (55.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081127204401')[0m
+Migrating to CreateIssues (20081127204415)
+  [4;35;1mSQL (44.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (119.1ms)[0m   [0;1mCREATE TABLE `issues` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `newsletter_id` int(11), `title` varchar(255) NOT NULL, `body` text NOT NULL, `due_at` datetime, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (50.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081127204415')[0m
+Migrating to CreateSubscriptions (20081127204442)
+  [4;36;1mSQL (39.9ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (468.7ms)[0m   [0mCREATE TABLE `subscriptions` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `user_id` int(11) NOT NULL, `subscribable_id` int(11) NOT NULL, `subscribable_type` varchar(255) NOT NULL, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (55.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081127204442')[0m
+Migrating to AddContentTypeToJoinTables (20081208161500)
+Migrating to AddTypeAndDeletedAtToIssuesNewsletters (20081209154934)
+  [4;35;1mSQL (98.3ms)[0m   [0mALTER TABLE `newsletters` ADD `type` varchar(255)[0m
+  [4;36;1mSQL (135.1ms)[0m   [0;1mALTER TABLE `newsletters` ADD `deleted_at` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (135.1ms)[0m   [0mALTER TABLE `issues` ADD `type` varchar(255)[0m
+  [4;36;1mSQL (135.4ms)[0m   [0;1mALTER TABLE `issues` ADD `deleted_at` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (47.5ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081209154934')[0m
+Migrating to AddDeletedAtToSubscriptions (20081209155409)
+  [4;36;1mSQL (117.9ms)[0m   [0;1mALTER TABLE `subscriptions` ADD `deleted_at` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (50.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081209155409')[0m
+Migrating to AddDraftToCalendarEvents (20081212105500)
+  [4;36;1mSQL (142.2ms)[0m   [0;1mALTER TABLE `calendar_events` ADD `draft` tinyint(1) DEFAULT 0 NOT NULL[0m
+  [4;35;1mSQL (50.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081212105500')[0m
+Migrating to AddContentTypeToAssetAssignments (20081212113000)
+  [4;36;1mSQL (39.6ms)[0m   [0;1mSHOW FIELDS FROM `asset_assignments`[0m
+  [4;35;1mSQL (135.0ms)[0m   [0mALTER TABLE `asset_assignments` ADD `content_type` varchar(255)[0m
+  [4;36;1mSQL (44.1ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (42.3ms)[0m   [0mUPDATE asset_assignments SET content_type = (SELECT type from contents WHERE contents.id = asset_assignments.content_id)[0m
+  [4;36;1mSQL (54.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081212113000')[0m
+Migrating to CreatePhotos (20081215092513)
+  [4;35;1mSQL (41.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (116.3ms)[0m   [0;1mCREATE TABLE `photos` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `type` varchar(20), `position` int(11), `title` varchar(255), `permalink` varchar(255), `author_id` int(11), `author_type` varchar(255), `author_name` varchar(40), `author_email` varchar(40), `author_homepage` varchar(255), `filter` varchar(255), `comment_age` int(11) DEFAULT 0, `cached_tag_list` varchar(255), `published_at` datetime, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (55.5ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081215092513')[0m
+Migrating to AddGoogleAnalyticsToSites (20081215111500)
+  [4;36;1mSQL (155.8ms)[0m   [0;1mALTER TABLE `sites` ADD `google_analytics_tracking_code` varchar(255)[0m
+  [4;35;1mSQL (55.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081215111500')[0m
+Migrating to AddGoogleAnalyticsToIssues (20081215155500)
+  [4;36;1mSQL (45.7ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (129.5ms)[0m   [0mALTER TABLE `issues` ADD `track` tinyint(1) DEFAULT 0[0m
+  [4;36;1mSQL (131.0ms)[0m   [0;1mALTER TABLE `issues` ADD `tracking_campaign` varchar(255)[0m
+  [4;35;1mSQL (143.4ms)[0m   [0mALTER TABLE `issues` ADD `tracking_source` varchar(255)[0m
+  [4;36;1mSQL (51.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081215155500')[0m
+Migrating to AddFileColumnsToPhoto (20081216110002)
+  [4;35;1mSQL (138.1ms)[0m   [0mALTER TABLE `photos` ADD `content_type` varchar(255)[0m
+  [4;36;1mSQL (140.2ms)[0m   [0;1mALTER TABLE `photos` ADD `filename` varchar(255)[0m
+  [4;35;1mSQL (141.4ms)[0m   [0mALTER TABLE `photos` ADD `thumbnail` varchar(255)[0m
+  [4;36;1mSQL (135.1ms)[0m   [0;1mALTER TABLE `photos` ADD `size` int(11)[0m
+  [4;35;1mSQL (135.5ms)[0m   [0mALTER TABLE `photos` ADD `width` int(11)[0m
+  [4;36;1mSQL (134.7ms)[0m   [0;1mALTER TABLE `photos` ADD `height` int(11)[0m
+  [4;35;1mSQL (131.4ms)[0m   [0mALTER TABLE `photos` ADD `thumbnails_count` int(11) DEFAULT 0[0m
+  [4;36;1mSQL (59.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081216110002')[0m
+Migrating to AddParentIdToPhotos (20081217120115)
+  [4;35;1mSQL (117.6ms)[0m   [0mALTER TABLE `photos` ADD `parent_id` int(11)[0m
+  [4;36;1mSQL (139.9ms)[0m   [0;1mALTER TABLE `photos` DROP `permalink`[0m
+  [4;35;1mSQL (58.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081217120115')[0m
+Migrating to RenameDueAtToPublishAtAndAddPublishedAt (20081218162038)
+  [4;36;1mSQL (38.5ms)[0m   [0;1mSHOW FIELDS FROM `issues`[0m
+  [4;35;1mSQL (42.4ms)[0m   [0mSHOW COLUMNS FROM `issues` LIKE 'due_at'[0m
+  [4;36;1mSQL (59.8ms)[0m   [0;1mALTER TABLE `issues` CHANGE `due_at` `publish_at` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (151.4ms)[0m   [0mALTER TABLE `issues` ADD `published_at` datetime[0m
+  [4;36;1mSQL (57.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081218162038')[0m
+Migrating to CreateCronJobs (20081219105924)
+  [4;35;1mSQL (113.4ms)[0m   [0mCREATE TABLE `cron_jobs` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `cornable_id` int(11) NOT NULL, `cornable_type` varchar(255) NOT NULL, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (63.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081219105924')[0m
+Migrating to CreateEmail (20081222095837)
+  [4;35;1mSQL (110.0ms)[0m   [0mCREATE TABLE `emails` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `from` varchar(255), `to` varchar(255), `last_send_attempt` int(11) DEFAULT 0, `mail` text, `created_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (58.6ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081222095837')[0m
+Migrating to RenameCalendarEventsDateFields (20090108131000)
+  [4;35;1mSQL (40.3ms)[0m   [0mSHOW FIELDS FROM `calendar_events`[0m
+  [4;36;1mSQL (43.6ms)[0m   [0;1mSHOW COLUMNS FROM `calendar_events` LIKE 'startdate'[0m
+  [4;35;1mSQL (61.5ms)[0m   [0mALTER TABLE `calendar_events` CHANGE `startdate` `start_date` datetime NOT NULL[0m
+  [4;36;1mSQL (40.7ms)[0m   [0;1mSHOW FIELDS FROM `calendar_events`[0m
+  [4;35;1mSQL (44.3ms)[0m   [0mSHOW COLUMNS FROM `calendar_events` LIKE 'enddate'[0m
+  [4;36;1mSQL (59.9ms)[0m   [0;1mALTER TABLE `calendar_events` CHANGE `enddate` `end_date` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (561.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090108131000')[0m
+Migrating to AddDueAtToCronJob (20090112111317)
+  [4;36;1mSQL (134.4ms)[0m   [0;1mALTER TABLE `cron_jobs` ADD `due_at` datetime[0m
+  [4;35;1mSQL (138.7ms)[0m   [0mALTER TABLE `cron_jobs` ADD `command` varchar(255)[0m
+  [4;36;1mSQL (47.6ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090112111317')[0m
+Migrating to ChangeCronableTypeAndCronableId (20090112121153)
+  [4;35;1mSQL (40.2ms)[0m   [0mSHOW FIELDS FROM `cron_jobs`[0m
+  [4;36;1mSQL (44.0ms)[0m   [0;1mSHOW COLUMNS FROM `cron_jobs` LIKE 'cornable_type'[0m
+  [4;35;1mSQL (65.3ms)[0m   [0mALTER TABLE `cron_jobs` CHANGE `cornable_type` `cronable_type` varchar(255) NOT NULL[0m
+  [4;36;1mSQL (42.6ms)[0m   [0;1mSHOW FIELDS FROM `cron_jobs`[0m
+  [4;35;1mSQL (43.3ms)[0m   [0mSHOW COLUMNS FROM `cron_jobs` LIKE 'cornable_id'[0m
+  [4;36;1mSQL (59.7ms)[0m   [0;1mALTER TABLE `cron_jobs` CHANGE `cornable_id` `cronable_id` int(11) NOT NULL[0m
+  [4;35;1mSQL (43.8ms)[0m   [0mSHOW FIELDS FROM `cron_jobs`[0m
+  [4;36;1mSQL (160.6ms)[0m   [0;1mALTER TABLE `cron_jobs` CHANGE `cronable_type` `cronable_type` varchar(255) DEFAULT NULL[0m
+  [4;35;1mSQL (66.5ms)[0m   [0mSHOW FIELDS FROM `cron_jobs`[0m
+  [4;36;1mSQL (150.3ms)[0m   [0;1mALTER TABLE `cron_jobs` CHANGE `cronable_id` `cronable_id` int(11) DEFAULT NULL[0m
+  [4;35;1mSQL (55.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090112121153')[0m
+Migrating to RemoveDraftFromCalendarEvents (20090114183700)
+  [4;36;1mSQL (171.5ms)[0m   [0;1mALTER TABLE `calendar_events` DROP `draft`[0m
+  [4;35;1mSQL (155.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090114183700')[0m
+Migrating to AddDraftToIssue (20090115095647)
+  [4;36;1mSQL (178.1ms)[0m   [0;1mALTER TABLE `issues` ADD `draft` int(11) DEFAULT 1[0m
+  [4;35;1mSQL (52.9ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090115095647')[0m
+Migrating to AddCronJobAttributes (20090115131518)
+  [4;36;1mSQL (145.0ms)[0m   [0;1mALTER TABLE `cron_jobs` DROP `due_at`[0m
+  [4;35;1mSQL (134.4ms)[0m   [0mALTER TABLE `cron_jobs` ADD `minute` varchar(255) DEFAULT '*'[0m
+  [4;36;1mSQL (135.3ms)[0m   [0;1mALTER TABLE `cron_jobs` ADD `hour` varchar(255) DEFAULT '*'[0m
+  [4;35;1mSQL (130.7ms)[0m   [0mALTER TABLE `cron_jobs` ADD `day` varchar(255) DEFAULT '*'[0m
+  [4;36;1mSQL (166.5ms)[0m   [0;1mALTER TABLE `cron_jobs` ADD `month` varchar(255) DEFAULT '*'[0m
+  [4;35;1mSQL (155.4ms)[0m   [0mALTER TABLE `cron_jobs` ADD `weekday` varchar(255) DEFAULT '*'[0m
+  [4;36;1mSQL (54.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090115131518')[0m
+Migrating to RenameCronJobToCronjob (20090115190041)
+  [4;35;1mSQL (47.5ms)[0m   [0mRENAME TABLE `cron_jobs` TO `cronjobs`[0m
+  [4;36;1mSQL (47.6ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090115190041')[0m
+Migrating to AddCronIdToCronjobs (20090115230142)
+  [4;35;1mSQL (143.6ms)[0m   [0mALTER TABLE `cronjobs` ADD `cron_id` varchar(255)[0m
+  [4;36;1mSQL (55.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090115230142')[0m
+Migrating to CreateThemesTables (20090115230153)
+  [4;35;1mSQL (38.9ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (121.3ms)[0m   [0;1mCREATE TABLE `themes` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `name` varchar(255), `theme_id` varchar(255), `author` varchar(255), `version` varchar(255), `homepage` varchar(255), `summary` text, `active` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (46.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (103.1ms)[0m   [0;1mCREATE TABLE `theme_files` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `theme_id` int(11), `type` varchar(255), `name` varchar(255), `directory` varchar(255), `data_file_name` varchar(255), `data_content_type` varchar(255), `data_file_size` int(11), `data_updated_at` datetime, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (63.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090115230153')[0m
+Migrating to AddEmailAndPublishedToNewsletter (20090116091232)
+  [4;36;1mSQL (147.3ms)[0m   [0;1mALTER TABLE `newsletters` ADD `email` varchar(255)[0m
+  [4;35;1mSQL (147.3ms)[0m   [0mALTER TABLE `newsletters` ADD `published` int(11) DEFAULT 1[0m
+  [4;36;1mSQL (47.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090116091232')[0m
+Migrating to AddBodyHtmlToIssue (20090119105945)
+  [4;35;1mSQL (138.0ms)[0m   [0mALTER TABLE `issues` ADD `body_html` text[0m
+  [4;36;1mSQL (51.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090119105945')[0m
+Migrating to AddFilterToIssue (20090119113903)
+  [4;35;1mSQL (141.7ms)[0m   [0mALTER TABLE `issues` ADD `filter` varchar(255)[0m
+  [4;36;1mSQL (51.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090119113903')[0m
+Migrating to AddAllDayToCalendarEvents (20090119352500)
+  [4;35;1mSQL (153.8ms)[0m   [0mALTER TABLE `calendar_events` ADD `all_day` tinyint(1) DEFAULT 0 NOT NULL[0m
+  [4;36;1mSQL (55.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090119352500')[0m
+Migrating to RemoveDraftAndAddDeliveredAtToIssue (20090121122417)
+  [4;35;1mSQL (588.9ms)[0m   [0mALTER TABLE `issues` DROP `draft`[0m
+  [4;36;1mSQL (108.6ms)[0m   [0;1mALTER TABLE `issues` ADD `delivered_at` datetime[0m
+  [4;35;1mSQL (62.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090121122417')[0m
+Migrating to AddQueuedAtToIssue (20090121140433)
+  [4;36;1mSQL (121.1ms)[0m   [0;1mALTER TABLE `issues` ADD `queued_at` datetime[0m
+  [4;35;1mSQL (51.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090121140433')[0m
+Migrating to AddStateToIssue (20090121142453)
+  [4;36;1mSQL (149.5ms)[0m   [0;1mALTER TABLE `issues` ADD `state` varchar(255) DEFAULT 'draft'[0m
+  [4;35;1mSQL (51.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090121142453')[0m
+Migrating to AddNameToNewsletters (20090122135822)
+  [4;36;1mSQL (129.7ms)[0m   [0;1mALTER TABLE `newsletters` ADD `name` varchar(255)[0m
+  [4;35;1mSQL (50.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090122135822')[0m
+Migrating to CreateUrlHistoryEntriesTable (20090126133510)
+  [4;36;1mSQL (40.7ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (115.3ms)[0m   [0mCREATE TABLE `url_history_entries` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `url` varchar(255), `params` text, `resource_id` int(11), `resource_type` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (58.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090126133510')[0m
+Migrating to RenameIssueDeliverAt (20090129143648)
+  [4;35;1mSQL (40.7ms)[0m   [0mSHOW FIELDS FROM `issues`[0m
+  [4;36;1mSQL (46.3ms)[0m   [0;1mSHOW COLUMNS FROM `issues` LIKE 'publish_at'[0m
+  [4;35;1mSQL (61.2ms)[0m   [0mALTER TABLE `issues` CHANGE `publish_at` `deliver_at` datetime DEFAULT NULL[0m
+  [4;36;1mSQL (50.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090129143648')[0m
+Migrating to MovePhotosToPaperclip (20090208083237)
+  [4;35;1mSQL (142.2ms)[0m   [0mALTER TABLE `photos` ADD `data_file_name` varchar(255)[0m
+  [4;36;1mSQL (138.7ms)[0m   [0;1mALTER TABLE `photos` ADD `data_content_type` varchar(255)[0m
+  [4;35;1mSQL (151.2ms)[0m   [0mALTER TABLE `photos` ADD `data_file_size` int(11)[0m
+  [4;36;1mSQL (126.7ms)[0m   [0;1mALTER TABLE `photos` ADD `data_updated_at` datetime[0m
+  [4;35;1mSQL (143.9ms)[0m   [0mALTER TABLE `photos` DROP `type`[0m
+  [4;36;1mSQL (143.5ms)[0m   [0;1mALTER TABLE `photos` DROP `position`[0m
+  [4;35;1mSQL (147.2ms)[0m   [0mALTER TABLE `photos` DROP `filter`[0m
+  [4;36;1mSQL (135.2ms)[0m   [0;1mALTER TABLE `photos` DROP `content_type`[0m
+  [4;35;1mSQL (146.6ms)[0m   [0mALTER TABLE `photos` DROP `filename`[0m
+  [4;36;1mSQL (139.2ms)[0m   [0;1mALTER TABLE `photos` DROP `thumbnail`[0m
+  [4;35;1mSQL (143.7ms)[0m   [0mALTER TABLE `photos` DROP `size`[0m
+  [4;36;1mSQL (126.3ms)[0m   [0;1mALTER TABLE `photos` DROP `width`[0m
+  [4;35;1mSQL (132.5ms)[0m   [0mALTER TABLE `photos` DROP `height`[0m
+  [4;36;1mSQL (126.6ms)[0m   [0;1mALTER TABLE `photos` DROP `thumbnails_count`[0m
+  [4;35;1mSQL (58.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090208083237')[0m
+Migrating to MoveAssetsToPaperclip (20090208090636)
+  [4;36;1mSQL (113.8ms)[0m   [0;1mALTER TABLE `asset_assignments` DROP `content_type`[0m
+  [4;35;1mSQL (142.0ms)[0m   [0mALTER TABLE `assets` ADD `data_file_name` varchar(255)[0m
+  [4;36;1mSQL (126.5ms)[0m   [0;1mALTER TABLE `assets` ADD `data_content_type` varchar(255)[0m
+  [4;35;1mSQL (127.6ms)[0m   [0mALTER TABLE `assets` ADD `data_file_size` int(11)[0m
+  [4;36;1mSQL (143.0ms)[0m   [0;1mALTER TABLE `assets` ADD `data_updated_at` datetime[0m
+  [4;35;1mSQL (139.6ms)[0m   [0mALTER TABLE `assets` DROP `parent_id`[0m
+  [4;36;1mSQL (138.8ms)[0m   [0;1mALTER TABLE `assets` DROP `size`[0m
+  [4;35;1mSQL (131.2ms)[0m   [0mALTER TABLE `assets` DROP `thumbnail`[0m
+  [4;36;1mSQL (739.7ms)[0m   [0;1mALTER TABLE `assets` DROP `width`[0m
+  [4;35;1mSQL (137.3ms)[0m   [0mALTER TABLE `assets` DROP `height`[0m
+  [4;36;1mSQL (144.8ms)[0m   [0;1mALTER TABLE `assets` DROP `thumbnails_count`[0m
+  [4;35;1mSQL (51.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090208090636')[0m
+Migrating to RenameCategoryAssignmentToCategorization (20090216114034)
+Migrating to AddSubscriptionsConfirmedAt (20090217092800)
+  [4;36;1mSQL (175.1ms)[0m   [0;1mALTER TABLE `subscriptions` ADD `confirmed_at` datetime[0m
+  [4;35;1mSQL (50.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090217092800')[0m
+Migrating to AddLocationToCalendarEvents (20090217102300)
+  [4;36;1mSQL (156.1ms)[0m   [0;1mALTER TABLE `calendar_events` ADD `location` varchar(255)[0m
+  [4;35;1mSQL (47.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090217102300')[0m
+Migrating to AddMetatagsToContents (20090218083515)
+  [4;36;1mSQL (159.6ms)[0m   [0;1mALTER TABLE `contents` ADD `meta_author` varchar(255)[0m
+  [4;35;1mSQL (147.3ms)[0m   [0mALTER TABLE `contents` ADD `meta_geourl` varchar(255)[0m
+  [4;36;1mSQL (147.3ms)[0m   [0;1mALTER TABLE `contents` ADD `meta_copyright` varchar(255)[0m
+  [4;35;1mSQL (143.4ms)[0m   [0mALTER TABLE `contents` ADD `meta_keywords` varchar(255)[0m
+  [4;36;1mSQL (322.7ms)[0m   [0;1mALTER TABLE `contents` ADD `meta_description` text[0m
+  [4;35;1mSQL (51.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090218083515')[0m
+Migrating to RenameLastCommentIdToLastPostId (20090228224221)
+  [4;36;1mSQL (45.7ms)[0m   [0;1mSHOW FIELDS FROM `boards`[0m
+  [4;35;1mSQL (44.2ms)[0m   [0mSHOW COLUMNS FROM `boards` LIKE 'last_comment_id'[0m
+  [4;36;1mSQL (70.4ms)[0m   [0;1mALTER TABLE `boards` CHANGE `last_comment_id` `last_post_id` int(11) DEFAULT NULL[0m
+  [4;35;1mSQL (43.8ms)[0m   [0mSHOW FIELDS FROM `topics`[0m
+  [4;36;1mSQL (42.2ms)[0m   [0;1mSHOW COLUMNS FROM `topics` LIKE 'last_comment_id'[0m
+  [4;35;1mSQL (64.2ms)[0m   [0mALTER TABLE `topics` CHANGE `last_comment_id` `last_post_id` int(11) DEFAULT NULL[0m
+  [4;36;1mSQL (142.3ms)[0m   [0;1mALTER TABLE `topics` DROP `comments_count`[0m
+  [4;35;1mSQL (54.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090228224221')[0m
+Migrating to MoveSectionsToPages (20090305123429)
+Migrating to AddCachedTagListToCalendarEvents (20090308184508)
+  [4;36;1mSQL (150.1ms)[0m   [0;1mALTER TABLE `calendar_events` ADD `cached_tag_list` varchar(255)[0m
+  [4;35;1mSQL (62.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090308184508')[0m
+Migrating to AddCachedTagListToAssets (20090308190842)
+  [4;36;1mSQL (134.1ms)[0m   [0;1mALTER TABLE `assets` ADD `cached_tag_list` varchar(255)[0m
+  [4;35;1mSQL (50.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090308190842')[0m
+Migrating to AddAssertableTypeAndId (20090511121758)
+  [4;36;1mSQL (133.9ms)[0m   [0;1mALTER TABLE `assets` ADD `assetable_type` varchar(255)[0m
+  [4;35;1mSQL (143.8ms)[0m   [0mALTER TABLE `assets` ADD `assetable_id` int(11)[0m
+  [4;36;1mSQL (58.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090511121758')[0m
+Migrating to RemoveTypeFromNewsletterAndIssue (20090514123939)
+  [4;35;1mSQL (129.8ms)[0m   [0mALTER TABLE `newsletters` DROP `type`[0m
+  [4;36;1mSQL (127.3ms)[0m   [0;1mALTER TABLE `issues` DROP `type`[0m
+  [4;35;1mSQL (46.5ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090514123939')[0m
+Migrating to RenameIssuesToAdvaIssues (20090514152101)
+  [4;36;1mSQL (49.3ms)[0m   [0;1mRENAME TABLE `issues` TO `adva_issues`[0m
+  [4;35;1mSQL (55.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090514152101')[0m
+Migrating to RenameSubscriptionToAdvaSubscription (20090514164106)
+  [4;36;1mSQL (54.0ms)[0m   [0;1mRENAME TABLE `subscriptions` TO `adva_subscriptions`[0m
+  [4;35;1mSQL (51.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090514164106')[0m
+Migrating to AddAdvaPrefixToRestOfNewsletter (20090515110115)
+  [4;36;1mSQL (41.9ms)[0m   [0;1mRENAME TABLE `cronjobs` TO `adva_cronjobs`[0m
+  [4;35;1mSQL (47.3ms)[0m   [0mRENAME TABLE `emails` TO `adva_emails`[0m
+  [4;36;1mSQL (47.2ms)[0m   [0;1mRENAME TABLE `newsletters` TO `adva_newsletters`[0m
+  [4;35;1mSQL (74.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090515110115')[0m
+Migrating to AddPublishedAtToSections (20090519132700)
+Migrating to AddMetatagsToSites (20090522082000)
+  [4;36;1mSQL (133.3ms)[0m   [0;1mALTER TABLE `sites` ADD `meta_author` varchar(255)[0m
+  [4;35;1mSQL (135.2ms)[0m   [0mALTER TABLE `sites` ADD `meta_geourl` varchar(255)[0m
+  [4;36;1mSQL (159.4ms)[0m   [0;1mALTER TABLE `sites` ADD `meta_copyright` varchar(255)[0m
+  [4;35;1mSQL (142.9ms)[0m   [0mALTER TABLE `sites` ADD `meta_keywords` varchar(255)[0m
+  [4;36;1mSQL (647.7ms)[0m   [0;1mALTER TABLE `sites` ADD `meta_description` text[0m
+  [4;35;1mSQL (55.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090522082000')[0m
+Migrating to AddBodyPlainToAdvaIssues (20090616110514)
+  [4;36;1mSQL (125.6ms)[0m   [0;1mALTER TABLE `adva_issues` ADD `body_plain` text[0m
+  [4;35;1mSQL (55.2ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090616110514')[0m
+Migrating to CreateAccounts (20090625124502)
+Migrating to AddAccountToUser (20090625133231)
+Migrating to CreateSectionTranslations (20090702085459)
+Migrating to CreateCategoryTranslations (20090702200226)
+Migrating to UpgradePaperclipPaths (20090707171100)
+Migrating to AddEmailNotificationToSite (20090709111934)
+Migrating to MigrateRolesTableToNewRbac (20090720132900)
+Migrating to AddTimestampsToSections (20100215123034)
+Migrating to AddIndexesForPageCachingTables (20100302135500)
+Migrating to AddLocaleToSite (20100318122325)
+Migrating to AddIndicesToContentsAndSections (20100323090000)
+  [4;36;1mSQL (40.8ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (45.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (44.8ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (44.1ms)[0m   [0mSHOW FIELDS FROM `accounts`[0m
+  [4;36;1mSQL (44.4ms)[0m   [0;1mdescribe `accounts`[0m
+  [4;35;1mSQL (44.2ms)[0m   [0mSHOW KEYS FROM `accounts`[0m
+  [4;36;1mSQL (43.6ms)[0m   [0;1mSHOW FIELDS FROM `activities`[0m
+  [4;35;1mSQL (44.7ms)[0m   [0mdescribe `activities`[0m
+  [4;36;1mSQL (41.6ms)[0m   [0;1mSHOW KEYS FROM `activities`[0m
+  [4;35;1mSQL (43.5ms)[0m   [0mSHOW FIELDS FROM `adva_cronjobs`[0m
+  [4;36;1mSQL (42.3ms)[0m   [0;1mdescribe `adva_cronjobs`[0m
+  [4;35;1mSQL (42.1ms)[0m   [0mSHOW KEYS FROM `adva_cronjobs`[0m
+  [4;36;1mSQL (42.8ms)[0m   [0;1mSHOW FIELDS FROM `adva_emails`[0m
+  [4;35;1mSQL (42.9ms)[0m   [0mdescribe `adva_emails`[0m
+  [4;36;1mSQL (42.4ms)[0m   [0;1mSHOW KEYS FROM `adva_emails`[0m
+  [4;35;1mSQL (43.6ms)[0m   [0mSHOW FIELDS FROM `adva_issues`[0m
+  [4;36;1mSQL (41.8ms)[0m   [0;1mdescribe `adva_issues`[0m
+  [4;35;1mSQL (42.1ms)[0m   [0mSHOW KEYS FROM `adva_issues`[0m
+  [4;36;1mSQL (43.1ms)[0m   [0;1mSHOW FIELDS FROM `adva_newsletters`[0m
+  [4;35;1mSQL (42.2ms)[0m   [0mdescribe `adva_newsletters`[0m
+  [4;36;1mSQL (42.0ms)[0m   [0;1mSHOW KEYS FROM `adva_newsletters`[0m
+  [4;35;1mSQL (48.3ms)[0m   [0mSHOW FIELDS FROM `adva_subscriptions`[0m
+  [4;36;1mSQL (43.0ms)[0m   [0;1mdescribe `adva_subscriptions`[0m
+  [4;35;1mSQL (41.2ms)[0m   [0mSHOW KEYS FROM `adva_subscriptions`[0m
+  [4;36;1mSQL (43.6ms)[0m   [0;1mSHOW FIELDS FROM `asset_assignments`[0m
+  [4;35;1mSQL (42.0ms)[0m   [0mdescribe `asset_assignments`[0m
+  [4;36;1mSQL (42.8ms)[0m   [0;1mSHOW KEYS FROM `asset_assignments`[0m
+  [4;35;1mSQL (43.5ms)[0m   [0mSHOW FIELDS FROM `assets`[0m
+  [4;36;1mSQL (42.5ms)[0m   [0;1mdescribe `assets`[0m
+  [4;35;1mSQL (44.1ms)[0m   [0mSHOW KEYS FROM `assets`[0m
+  [4;36;1mSQL (58.1ms)[0m   [0;1mSHOW FIELDS FROM `boards`[0m
+  [4;35;1mSQL (44.3ms)[0m   [0mdescribe `boards`[0m
+  [4;36;1mSQL (41.9ms)[0m   [0;1mSHOW KEYS FROM `boards`[0m
+  [4;35;1mSQL (45.6ms)[0m   [0mSHOW FIELDS FROM `cached_page_references`[0m
+  [4;36;1mSQL (45.0ms)[0m   [0;1mdescribe `cached_page_references`[0m
+  [4;35;1mSQL (42.9ms)[0m   [0mSHOW KEYS FROM `cached_page_references`[0m
+  [4;36;1mSQL (42.3ms)[0m   [0;1mSHOW FIELDS FROM `cached_pages`[0m
+  [4;35;1mSQL (43.3ms)[0m   [0mdescribe `cached_pages`[0m
+  [4;36;1mSQL (46.9ms)[0m   [0;1mSHOW KEYS FROM `cached_pages`[0m
+  [4;35;1mSQL (43.4ms)[0m   [0mSHOW FIELDS FROM `calendar_events`[0m
+  [4;36;1mSQL (44.7ms)[0m   [0;1mdescribe `calendar_events`[0m
+  [4;35;1mSQL (44.2ms)[0m   [0mSHOW KEYS FROM `calendar_events`[0m
+  [4;36;1mSQL (43.4ms)[0m   [0;1mSHOW FIELDS FROM `categories`[0m
+  [4;35;1mSQL (44.9ms)[0m   [0mdescribe `categories`[0m
+  [4;36;1mSQL (42.3ms)[0m   [0;1mSHOW KEYS FROM `categories`[0m
+  [4;35;1mSQL (45.1ms)[0m   [0mSHOW FIELDS FROM `categorizations`[0m
+  [4;36;1mSQL (42.6ms)[0m   [0;1mdescribe `categorizations`[0m
+  [4;35;1mSQL (43.1ms)[0m   [0mSHOW KEYS FROM `categorizations`[0m
+  [4;36;1mSQL (43.3ms)[0m   [0;1mSHOW FIELDS FROM `category_translations`[0m
+  [4;35;1mSQL (49.4ms)[0m   [0mdescribe `category_translations`[0m
+  [4;36;1mSQL (42.7ms)[0m   [0;1mSHOW KEYS FROM `category_translations`[0m
+  [4;35;1mSQL (45.8ms)[0m   [0mSHOW FIELDS FROM `comments`[0m
+  [4;36;1mSQL (45.1ms)[0m   [0;1mdescribe `comments`[0m
+  [4;35;1mSQL (43.3ms)[0m   [0mSHOW KEYS FROM `comments`[0m
+  [4;36;1mSQL (42.6ms)[0m   [0;1mSHOW FIELDS FROM `content_translations`[0m
+  [4;35;1mSQL (46.2ms)[0m   [0mdescribe `content_translations`[0m
+  [4;36;1mSQL (43.8ms)[0m   [0;1mSHOW KEYS FROM `content_translations`[0m
+  [4;35;1mSQL (43.7ms)[0m   [0mSHOW FIELDS FROM `contents`[0m
+  [4;36;1mSQL (44.8ms)[0m   [0;1mdescribe `contents`[0m
+  [4;35;1mSQL (42.4ms)[0m   [0mSHOW KEYS FROM `contents`[0m
+  [4;36;1mSQL (42.9ms)[0m   [0;1mSHOW FIELDS FROM `counters`[0m
+  [4;35;1mSQL (43.3ms)[0m   [0mdescribe `counters`[0m
+  [4;36;1mSQL (44.0ms)[0m   [0;1mSHOW KEYS FROM `counters`[0m
+  [4;35;1mSQL (42.5ms)[0m   [0mSHOW FIELDS FROM `memberships`[0m
+  [4;36;1mSQL (43.7ms)[0m   [0;1mdescribe `memberships`[0m
+  [4;35;1mSQL (43.0ms)[0m   [0mSHOW KEYS FROM `memberships`[0m
+  [4;36;1mSQL (45.5ms)[0m   [0;1mSHOW FIELDS FROM `photos`[0m
+  [4;35;1mSQL (44.1ms)[0m   [0mdescribe `photos`[0m
+  [4;36;1mSQL (41.3ms)[0m   [0;1mSHOW KEYS FROM `photos`[0m
+  [4;35;1mSQL (43.5ms)[0m   [0mSHOW FIELDS FROM `plugin_configs`[0m
+  [4;36;1mSQL (45.0ms)[0m   [0;1mdescribe `plugin_configs`[0m
+  [4;35;1mSQL (45.2ms)[0m   [0mSHOW KEYS FROM `plugin_configs`[0m
+  [4;36;1mSQL (45.0ms)[0m   [0;1mSHOW FIELDS FROM `roles`[0m
+  [4;35;1mSQL (56.5ms)[0m   [0mdescribe `roles`[0m
+  [4;36;1mSQL (52.2ms)[0m   [0;1mSHOW KEYS FROM `roles`[0m
+  [4;35;1mSQL (43.3ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mSQL (45.0ms)[0m   [0;1mdescribe `section_translations`[0m
+  [4;35;1mSQL (42.6ms)[0m   [0mSHOW KEYS FROM `section_translations`[0m
+  [4;36;1mSQL (57.7ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mSQL (61.4ms)[0m   [0mdescribe `sections`[0m
+  [4;36;1mSQL (43.7ms)[0m   [0;1mSHOW KEYS FROM `sections`[0m
+  [4;35;1mSQL (44.6ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (44.0ms)[0m   [0;1mdescribe `sites`[0m
+  [4;35;1mSQL (42.7ms)[0m   [0mSHOW KEYS FROM `sites`[0m
+  [4;36;1mSQL (44.9ms)[0m   [0;1mSHOW FIELDS FROM `spam_reports`[0m
+  [4;35;1mSQL (43.7ms)[0m   [0mdescribe `spam_reports`[0m
+  [4;36;1mSQL (44.3ms)[0m   [0;1mSHOW KEYS FROM `spam_reports`[0m
+  [4;35;1mSQL (44.7ms)[0m   [0mSHOW FIELDS FROM `taggings`[0m
+  [4;36;1mSQL (43.0ms)[0m   [0;1mdescribe `taggings`[0m
+  [4;35;1mSQL (40.0ms)[0m   [0mSHOW KEYS FROM `taggings`[0m
+  [4;36;1mSQL (43.3ms)[0m   [0;1mSHOW FIELDS FROM `tags`[0m
+  [4;35;1mSQL (50.4ms)[0m   [0mdescribe `tags`[0m
+  [4;36;1mSQL (473.5ms)[0m   [0;1mSHOW KEYS FROM `tags`[0m
+  [4;35;1mSQL (45.3ms)[0m   [0mSHOW FIELDS FROM `theme_files`[0m
+  [4;36;1mSQL (44.3ms)[0m   [0;1mdescribe `theme_files`[0m
+  [4;35;1mSQL (44.9ms)[0m   [0mSHOW KEYS FROM `theme_files`[0m
+  [4;36;1mSQL (45.8ms)[0m   [0;1mSHOW FIELDS FROM `themes`[0m
+  [4;35;1mSQL (44.1ms)[0m   [0mdescribe `themes`[0m
+  [4;36;1mSQL (45.2ms)[0m   [0;1mSHOW KEYS FROM `themes`[0m
+  [4;35;1mSQL (45.3ms)[0m   [0mSHOW FIELDS FROM `topics`[0m
+  [4;36;1mSQL (44.2ms)[0m   [0;1mdescribe `topics`[0m
+  [4;35;1mSQL (44.6ms)[0m   [0mSHOW KEYS FROM `topics`[0m
+  [4;36;1mSQL (44.8ms)[0m   [0;1mSHOW FIELDS FROM `url_history_entries`[0m
+  [4;35;1mSQL (44.9ms)[0m   [0mdescribe `url_history_entries`[0m
+  [4;36;1mSQL (44.2ms)[0m   [0;1mSHOW KEYS FROM `url_history_entries`[0m
+  [4;35;1mSQL (45.7ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mSQL (45.5ms)[0m   [0;1mdescribe `users`[0m
+  [4;35;1mSQL (42.5ms)[0m   [0mSHOW KEYS FROM `users`[0m
+  [4;36;1mSQL (42.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (44.2ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (46.6ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (47.3ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (40.2ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSection Columns (44.9ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mBlog Columns (41.4ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::SitesController#edit (for 127.0.0.1 at 2010-03-31 16:07:06) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mSite Load (41.7ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mUser Columns (41.7ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (45.6ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (38.5ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mRbac::Role Columns (42.7ms)[0m   [0;1mSHOW FIELDS FROM `roles`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/sites/edit
+Rendered admin/sites/_email_notifications (3.1ms)
+Rendered admin/sites/_comments_settings (3.3ms)
+Rendered admin/sites/_meta_tags (16.9ms)
+Rendered admin/spam/_default_settings (9.5ms)
+Rendered admin/spam/_akismet_settings (2.8ms)
+Rendered admin/spam/_defensio_settings (3.0ms)
+Rendered admin/sites/_spam_settings (37.3ms)
+Rendered admin/sites/_form (176.0ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSectionTranslation Load (40.6ms)[0m   [0mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;36;1mSectionTranslation Columns (42.3ms)[0m   [0;1mSHOW FIELDS FROM `section_translations`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (13.3ms)
+Rendered shared/_flash (1.2ms)
+Completed in 931ms (View: 609, DB: 600) | 200 OK [http://localhost/admin/sites/1/edit]
+  [4;36;1mSQL (43.0ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (44.2ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (42.5ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (43.9ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (42.7ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSection Columns (45.0ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mBlog Columns (40.2ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::AssetsController#index (for 127.0.0.1 at 2010-03-31 16:07:17) [GET]
+  Parameters: {"site_id"=>"1"}
+  [4;35;1mSite Load (39.5ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mUser Columns (39.4ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (42.5ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (39.5ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mAsset Load (38.9ms)[0m   [0;1mSELECT * FROM `assets` WHERE ((`assets`.site_id = 1) AND (`assets`.site_id = 1)) ORDER BY assets.created_at desc LIMIT 0, 24[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/assets/index
+  [4;36;1mAsset Columns (41.3ms)[0m   [0;1mSHOW FIELDS FROM `assets`[0m
+  [4;35;1mSQL (42.8ms)[0m   [0mSELECT count(*) AS count_all FROM `assets` WHERE (`assets`.site_id = 1) [0m
+  [4;36;1mSQL (42.6ms)[0m   [0;1mSELECT sum(`assets`.data_file_size) AS sum_data_file_size FROM `assets` WHERE (`assets`.site_id = 1) [0m
+Rendered admin/assets/_sidebar (143.6ms)
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSectionTranslation Load (39.9ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;35;1mSectionTranslation Columns (42.3ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (7.9ms)
+Rendered shared/_flash (0.2ms)
+Completed in 727ms (View: 276, DB: 710) | 200 OK [http://localhost/admin/sites/1/assets]
+  [4;35;1mSQL (42.4ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSite Columns (42.9ms)[0m   [0;1mSHOW FIELDS FROM `sites`[0m
+  [4;35;1mSQL (42.0ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mSite Load (43.6ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mSection Load (43.9ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSection Columns (44.9ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mBlog Columns (40.2ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::ArticlesController#index (for 127.0.0.1 at 2010-03-31 16:07:23) [GET]
+  Parameters: {"site_id"=>"1", "section_id"=>"1"}
+  [4;36;1mSite Load (39.9ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mSection Load (43.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`id` = 1 AND (`sections`.site_id = 1)) ORDER BY lft, lft[0m
+  [4;36;1mUser Columns (38.6ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (45.8ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (45.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`id` = 1 AND (`sections`.site_id = 1)) ORDER BY lft, lft[0m
+  [4;35;1mArticle Columns (40.8ms)[0m   [0mSHOW FIELDS FROM `contents`[0m
+  [4;36;1mArticle Load (43.4ms)[0m   [0;1mSELECT * FROM `contents` WHERE ((`contents`.section_id = 1) AND (`contents`.section_id = 1)) AND ( (`contents`.`type` = 'Article' ) ) ORDER BY contents.published_at DESC LIMIT 0, 25[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/articles/index
+  [4;35;1mSectionTranslation Load (39.6ms)[0m   [0mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;36;1mSectionTranslation Columns (42.9ms)[0m   [0;1mSHOW FIELDS FROM `section_translations`[0m
+  [4;35;1mSection Load (39.6ms)[0m   [0mSELECT * FROM `sections` ORDER BY lft LIMIT 1[0m
+  [4;36;1mCategory Load (38.6ms)[0m   [0;1mSELECT * FROM `categories` WHERE (`categories`.section_id = 1) ORDER BY lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (7.0ms)
+Rendered shared/_flash (0.2ms)
+Completed in 818ms (View: 323, DB: 757) | 200 OK [http://localhost/admin/sites/1/sections/1/articles]
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (259.3ms)[0m   [0;1mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+  [4;35;1mSQL (259.9ms)[0m   [0mCREATE UNIQUE INDEX `unique_schema_migrations` ON `schema_migrations` (`version`)[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateActivitiesTable (20080401000000)
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (108.9ms)[0m   [0mCREATE TABLE `activities` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `author_id` int(11), `author_type` varchar(255), `author_name` varchar(40), `author_email` varchar(40), `author_homepage` varchar(255), `actions` varchar(255), `object_id` int(11), `object_type` varchar(15), `object_attributes` text, `created_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000000')[0m
+Migrating to CreateSitesTable (20080401000001)
+  [4;35;1mSQL (104.6ms)[0m   [0mCREATE TABLE `sites` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `host` varchar(255), `title` varchar(255), `subtitle` varchar(255), `email` varchar(255), `timezone` varchar(255), `theme_names` varchar(255), `ping_urls` text, `akismet_key` varchar(100), `akismet_url` varchar(255), `approve_comments` tinyint(1), `comment_age` int(11), `comment_filter` varchar(255), `search_path` varchar(255), `tag_path` varchar(255), `tag_layout` varchar(255), `permalink_style` varchar(255), `permissions` text) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000001')[0m
+Migrating to CreateSectionsTable (20080401000002)
+  [4;35;1mSQL (100.5ms)[0m   [0mCREATE TABLE `sections` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `type` varchar(255), `site_id` int(11), `parent_id` int(11), `lft` int(11) DEFAULT 0 NOT NULL, `rgt` int(11) DEFAULT 0 NOT NULL, `path` varchar(255), `permalink` varchar(255), `title` varchar(255), `layout` varchar(255), `template` varchar(255), `options` text, `contents_count` int(11), `comment_age` int(11), `content_filter` varchar(255), `permissions` text) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000002')[0m
+Migrating to CreateContentsTable (20080401000003)
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (98.9ms)[0m   [0;1mCREATE TABLE `contents` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `type` varchar(20), `position` int(11), `permalink` varchar(255), `excerpt_html` text, `body_html` text, `author_id` int(11), `author_type` varchar(255), `author_name` varchar(40), `author_email` varchar(40), `author_homepage` varchar(255), `version` int(11), `filter` varchar(255), `comment_age` int(11) DEFAULT 0, `cached_tag_list` varchar(255), `assets_count` int(11) DEFAULT 0, `published_at` datetime, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (119.3ms)[0m   [0mCREATE TABLE `content_translations` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `content_id` int(11), `locale` varchar(255), `version` int(11), `current` tinyint(1), `body` text, `title` varchar(255), `body_html` text, `excerpt_html` text, `excerpt` text, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000003')[0m
+Migrating to CreateCategoriesTable (20080401000004)
+  [4;35;1mSQL (103.9ms)[0m   [0mCREATE TABLE `categories` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `section_id` int(11), `parent_id` int(11), `lft` int(11) DEFAULT 0 NOT NULL, `rgt` int(11) DEFAULT 0 NOT NULL, `title` varchar(255), `path` varchar(255), `permalink` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000004')[0m
+Migrating to CreateCategoryAssignments (20080401000005)
+  [4;35;1mSQL (125.2ms)[0m   [0mCREATE TABLE `category_assignments` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `content_id` int(11), `category_id` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000005')[0m
+Migrating to CreateTaggableTables (20080401000006)
+  [4;35;1mSQL (103.1ms)[0m   [0mCREATE TABLE `tags` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (120.7ms)[0m   [0;1mCREATE TABLE `taggings` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `tag_id` int(11), `taggable_id` int(11), `taggable_type` varchar(255), `created_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (125.0ms)[0m   [0mCREATE INDEX `index_taggings_on_tag_id` ON `taggings` (`tag_id`)[0m
+  [4;36;1mSQL (120.2ms)[0m   [0;1mCREATE INDEX `index_taggings_on_taggable_id_and_taggable_type` ON `taggings` (`taggable_id`, `taggable_type`)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080401000006')[0m
+Migrating to CreateCommentsTable (20080401000007)
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (120.9ms)[0m   [0mCREATE TABLE `comments` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `commentable_id` int(11), `commentable_type` varchar(255), `author_id` int(11), `author_type` varchar(255), `author_name` varchar(40), `author_email` varchar(40), `author_homepage` varchar(255), `body` text, `body_html` text, `approved` int(11) DEFAULT 0 NOT NULL, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000007')[0m
+Migrating to CreateForumTables (20080401000011)
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (132.5ms)[0m   [0;1mCREATE TABLE `topics` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `title` varchar(255), `sticky` int(11) DEFAULT 0, `locked` tinyint(1) DEFAULT 0, `comments_count` int(11) DEFAULT 0, `hits` int(11) DEFAULT 0, `last_comment_id` int(11), `last_author_id` int(11), `last_author_type` varchar(255), `last_author_name` varchar(255), `permalink` varchar(255), `created_at` datetime, `updated_at` datetime, `last_updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (1.5ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080401000011')[0m
+Migrating to CreateCachedPageReferences (20080401000020)
+  [4;36;1mSQL (1.1ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (123.4ms)[0m   [0mCREATE TABLE `cached_page_references` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `cached_page_id` int(11), `object_id` int(11), `object_type` varchar(255), `method` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080401000020')[0m
+Migrating to CreateCachedPages (20080401000021)
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (134.9ms)[0m   [0;1mCREATE TABLE `cached_pages` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `url` varchar(255), `updated_at` datetime, `cleared_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080401000021')[0m
+Migrating to CreateUsersTable (20080402000001)
+  [4;36;1mSQL (111.9ms)[0m   [0;1mCREATE TABLE `users` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `first_name` varchar(40), `last_name` varchar(40), `email` varchar(100), `homepage` varchar(255), `about` varchar(255), `signature` varchar(255), `password_hash` varchar(40), `password_salt` varchar(40), `ip` varchar(255), `agent` varchar(255), `referer` varchar(255), `remember_me` varchar(40), `token_key` varchar(40), `token_expiration` datetime, `anonymous` tinyint(1) DEFAULT 0, `created_at` datetime, `updated_at` datetime, `verified_at` datetime, `deleted_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080402000001')[0m
+Migrating to CreateMembershipsTable (20080402000005)
+  [4;36;1mSQL (1.2ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (113.6ms)[0m   [0mCREATE TABLE `memberships` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `user_id` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080402000005')[0m
+Migrating to CreateRoleTables (20080402000006)
+  [4;35;1mSQL (103.9ms)[0m   [0mCREATE TABLE `roles` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `user_id` int(11), `context_id` int(11), `context_type` varchar(255), `type` varchar(25)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080402000006')[0m
+Migrating to CreateAssetsTable (20080429181111)
+  [4;35;1mSQL (1.6ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (128.9ms)[0m   [0;1mCREATE TABLE `asset_assignments` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `content_id` int(11), `asset_id` int(11), `position` int(11), `label` varchar(255), `created_at` datetime, `active` tinyint(1)) ENGINE=InnoDB[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (134.8ms)[0m   [0;1mCREATE TABLE `assets` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `parent_id` int(11), `user_id` int(11), `content_type` varchar(255), `filename` varchar(255), `size` int(11), `thumbnail` varchar(255), `width` int(11), `height` int(11), `title` varchar(255), `thumbnails_count` int(11) DEFAULT 0, `created_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080429181111')[0m
+Migrating to CreateCountersTable (20080601194338)
+  [4;36;1mSQL (1.3ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (134.3ms)[0m   [0mCREATE TABLE `counters` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `owner_id` int(11), `owner_type` varchar(255), `name` varchar(25), `count` int(11) DEFAULT 0) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080601194338')[0m
+Migrating to RemovePosition (20080626111252)
+  [4;35;1mSQL (118.4ms)[0m   [0mALTER TABLE `asset_assignments` DROP `position`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080626111252')[0m
+Migrating to CreatePluginConfigs (20080710000000)
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (153.7ms)[0m   [0;1mCREATE TABLE `plugin_configs` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `name` varchar(255), `options` text) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080710000000')[0m
+Migrating to AddSpamEngineToSite (20080712133231)
+  [4;36;1mSQL (151.6ms)[0m   [0;1mALTER TABLE `sites` ADD `spam_options` text[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080712133231')[0m
+Migrating to AddSpamInfoToComments (20080712154718)
+  [4;36;1mSQL (146.7ms)[0m   [0;1mALTER TABLE `comments` ADD `spaminess` text[0m
+  [4;35;1mSQL (2.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080712154718')[0m
+Migrating to SpamReportsTable (20080713161553)
+  [4;36;1mSQL (165.3ms)[0m   [0;1mCREATE TABLE `spam_reports` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `subject_id` int(11), `subject_type` varchar(255), `engine` varchar(255), `spaminess` float, `data` text) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080713161553')[0m
+Migrating to PluginOwnerColumn (20080715131051)
+  [4;36;1mSQL (161.2ms)[0m   [0;1mALTER TABLE `plugin_configs` DROP `site_id`[0m
+  [4;35;1mSQL (165.4ms)[0m   [0mALTER TABLE `plugin_configs` ADD `owner_id` int(11)[0m
+  [4;36;1mSQL (144.1ms)[0m   [0;1mALTER TABLE `plugin_configs` ADD `owner_type` varchar(255)[0m
+  [4;35;1mSQL (1.9ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080715131051')[0m
+Migrating to CreateBoardsTable (20080721115631)
+  [4;36;1mSQL (1.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (140.9ms)[0m   [0mCREATE TABLE `boards` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `title` varchar(255), `permalink` varchar(255), `description` text, `position` int(11), `last_comment_id` int(11), `last_author_id` int(11), `last_author_type` varchar(255), `last_author_name` varchar(255), `created_at` datetime, `updated_at` datetime, `last_updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (125.6ms)[0m   [0;1mALTER TABLE `topics` ADD `board_id` int(11)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080721115631')[0m
+Migrating to AddCommentBoardId (20080721141112)
+  [4;36;1mSQL (138.3ms)[0m   [0;1mALTER TABLE `comments` ADD `board_id` int(11)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20080721141112')[0m
+Migrating to AddTopicAuthor (20080723181444)
+  [4;36;1mSQL (145.4ms)[0m   [0;1mALTER TABLE `topics` ADD `author_id` int(11)[0m
+  [4;35;1mSQL (164.7ms)[0m   [0mALTER TABLE `topics` ADD `author_type` varchar(255)[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20080723181444')[0m
+Migrating to CreateCalendarEventsTable (20081125105510)
+  [4;35;1mSQL (1.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (151.2ms)[0m   [0;1mCREATE TABLE `calendar_events` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `title` varchar(255) NOT NULL, `permalink` varchar(255), `startdate` datetime NOT NULL, `enddate` datetime, `published_at` datetime, `host` varchar(255), `body` text, `body_html` text, `filter` varchar(255), `parent_id` int(11), `section_id` int(11), `user_id` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (135.9ms)[0m   [0mCREATE UNIQUE INDEX `index_calendar_events_on_permalink` ON `calendar_events` (`permalink`)[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081125105510')[0m
+Migrating to CreateNewsletters (20081127204401)
+  [4;35;1mSQL (1.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (118.7ms)[0m   [0;1mCREATE TABLE `newsletters` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `subscriptions_count` int(11) DEFAULT 0, `issues_count` int(11) DEFAULT 0, `title` varchar(255) NOT NULL, `desc` text, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081127204401')[0m
+Migrating to CreateIssues (20081127204415)
+  [4;36;1mSQL (1.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (135.7ms)[0m   [0mCREATE TABLE `issues` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `newsletter_id` int(11), `title` varchar(255) NOT NULL, `body` text NOT NULL, `due_at` datetime, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081127204415')[0m
+Migrating to CreateSubscriptions (20081127204442)
+  [4;35;1mSQL (1.8ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (123.5ms)[0m   [0;1mCREATE TABLE `subscriptions` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `user_id` int(11) NOT NULL, `subscribable_id` int(11) NOT NULL, `subscribable_type` varchar(255) NOT NULL, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081127204442')[0m
+Migrating to AddContentTypeToJoinTables (20081208161500)
+  [4;36;1mSQL (107.7ms)[0m   [0;1mALTER TABLE `category_assignments` ADD `content_type` varchar(255)[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mUPDATE category_assignments SET content_type = (SELECT type from contents WHERE contents.id = category_assignments.content_id)[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081208161500')[0m
+Migrating to AddTypeAndDeletedAtToIssuesNewsletters (20081209154934)
+  [4;35;1mSQL (138.3ms)[0m   [0mALTER TABLE `newsletters` ADD `type` varchar(255)[0m
+  [4;36;1mSQL (185.7ms)[0m   [0;1mALTER TABLE `newsletters` ADD `deleted_at` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (133.3ms)[0m   [0mALTER TABLE `issues` ADD `type` varchar(255)[0m
+  [4;36;1mSQL (153.9ms)[0m   [0;1mALTER TABLE `issues` ADD `deleted_at` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081209154934')[0m
+Migrating to AddDeletedAtToSubscriptions (20081209155409)
+  [4;36;1mSQL (132.3ms)[0m   [0;1mALTER TABLE `subscriptions` ADD `deleted_at` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (3.2ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081209155409')[0m
+Migrating to AddDraftToCalendarEvents (20081212105500)
+  [4;36;1mSQL (133.0ms)[0m   [0;1mALTER TABLE `calendar_events` ADD `draft` tinyint(1) DEFAULT 0 NOT NULL[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081212105500')[0m
+Migrating to AddContentTypeToAssetAssignments (20081212113000)
+  [4;36;1mSQL (3.0ms)[0m   [0;1mSHOW FIELDS FROM `asset_assignments`[0m
+  [4;35;1mSQL (133.1ms)[0m   [0mALTER TABLE `asset_assignments` ADD `content_type` varchar(255)[0m
+  [4;36;1mSQL (1.7ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mUPDATE asset_assignments SET content_type = (SELECT type from contents WHERE contents.id = asset_assignments.content_id)[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081212113000')[0m
+Migrating to CreatePhotos (20081215092513)
+  [4;35;1mSQL (1.7ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (168.5ms)[0m   [0;1mCREATE TABLE `photos` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `section_id` int(11), `type` varchar(20), `position` int(11), `title` varchar(255), `permalink` varchar(255), `author_id` int(11), `author_type` varchar(255), `author_name` varchar(40), `author_email` varchar(40), `author_homepage` varchar(255), `filter` varchar(255), `comment_age` int(11) DEFAULT 0, `cached_tag_list` varchar(255), `published_at` datetime, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081215092513')[0m
+Migrating to AddGoogleAnalyticsToSites (20081215111500)
+  [4;36;1mSQL (116.5ms)[0m   [0;1mALTER TABLE `sites` ADD `google_analytics_tracking_code` varchar(255)[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081215111500')[0m
+Migrating to AddGoogleAnalyticsToIssues (20081215155500)
+  [4;36;1mSQL (1.9ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (123.4ms)[0m   [0mALTER TABLE `issues` ADD `track` tinyint(1) DEFAULT 0[0m
+  [4;36;1mSQL (132.5ms)[0m   [0;1mALTER TABLE `issues` ADD `tracking_campaign` varchar(255)[0m
+  [4;35;1mSQL (142.1ms)[0m   [0mALTER TABLE `issues` ADD `tracking_source` varchar(255)[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081215155500')[0m
+Migrating to AddFileColumnsToPhoto (20081216110002)
+  [4;35;1mSQL (141.4ms)[0m   [0mALTER TABLE `photos` ADD `content_type` varchar(255)[0m
+  [4;36;1mSQL (153.1ms)[0m   [0;1mALTER TABLE `photos` ADD `filename` varchar(255)[0m
+  [4;35;1mSQL (140.5ms)[0m   [0mALTER TABLE `photos` ADD `thumbnail` varchar(255)[0m
+  [4;36;1mSQL (150.6ms)[0m   [0;1mALTER TABLE `photos` ADD `size` int(11)[0m
+  [4;35;1mSQL (147.3ms)[0m   [0mALTER TABLE `photos` ADD `width` int(11)[0m
+  [4;36;1mSQL (133.1ms)[0m   [0;1mALTER TABLE `photos` ADD `height` int(11)[0m
+  [4;35;1mSQL (142.3ms)[0m   [0mALTER TABLE `photos` ADD `thumbnails_count` int(11) DEFAULT 0[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081216110002')[0m
+Migrating to AddParentIdToPhotos (20081217120115)
+  [4;35;1mSQL (136.6ms)[0m   [0mALTER TABLE `photos` ADD `parent_id` int(11)[0m
+  [4;36;1mSQL (132.1ms)[0m   [0;1mALTER TABLE `photos` DROP `permalink`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20081217120115')[0m
+Migrating to RenameDueAtToPublishAtAndAddPublishedAt (20081218162038)
+  [4;36;1mSQL (2.6ms)[0m   [0;1mSHOW FIELDS FROM `issues`[0m
+  [4;35;1mSQL (1.9ms)[0m   [0mSHOW COLUMNS FROM `issues` LIKE 'due_at'[0m
+  [4;36;1mSQL (120.3ms)[0m   [0;1mALTER TABLE `issues` CHANGE `due_at` `publish_at` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (149.6ms)[0m   [0mALTER TABLE `issues` ADD `published_at` datetime[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081218162038')[0m
+Migrating to CreateCronJobs (20081219105924)
+  [4;35;1mSQL (194.3ms)[0m   [0mCREATE TABLE `cron_jobs` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `cornable_id` int(11) NOT NULL, `cornable_type` varchar(255) NOT NULL, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081219105924')[0m
+Migrating to CreateEmail (20081222095837)
+  [4;35;1mSQL (136.1ms)[0m   [0mCREATE TABLE `emails` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `from` varchar(255), `to` varchar(255), `last_send_attempt` int(11) DEFAULT 0, `mail` text, `created_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20081222095837')[0m
+Migrating to RenameCalendarEventsDateFields (20090108131000)
+  [4;35;1mSQL (2.8ms)[0m   [0mSHOW FIELDS FROM `calendar_events`[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mSHOW COLUMNS FROM `calendar_events` LIKE 'startdate'[0m
+  [4;35;1mSQL (121.0ms)[0m   [0mALTER TABLE `calendar_events` CHANGE `startdate` `start_date` datetime NOT NULL[0m
+  [4;36;1mSQL (2.5ms)[0m   [0;1mSHOW FIELDS FROM `calendar_events`[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW COLUMNS FROM `calendar_events` LIKE 'enddate'[0m
+  [4;36;1mSQL (127.8ms)[0m   [0;1mALTER TABLE `calendar_events` CHANGE `enddate` `end_date` datetime DEFAULT NULL[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090108131000')[0m
+Migrating to AddDueAtToCronJob (20090112111317)
+  [4;36;1mSQL (195.7ms)[0m   [0;1mALTER TABLE `cron_jobs` ADD `due_at` datetime[0m
+  [4;35;1mSQL (162.1ms)[0m   [0mALTER TABLE `cron_jobs` ADD `command` varchar(255)[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090112111317')[0m
+Migrating to ChangeCronableTypeAndCronableId (20090112121153)
+  [4;35;1mSQL (2.2ms)[0m   [0mSHOW FIELDS FROM `cron_jobs`[0m
+  [4;36;1mSQL (1.4ms)[0m   [0;1mSHOW COLUMNS FROM `cron_jobs` LIKE 'cornable_type'[0m
+  [4;35;1mSQL (129.8ms)[0m   [0mALTER TABLE `cron_jobs` CHANGE `cornable_type` `cronable_type` varchar(255) NOT NULL[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mSHOW FIELDS FROM `cron_jobs`[0m
+  [4;35;1mSQL (1.7ms)[0m   [0mSHOW COLUMNS FROM `cron_jobs` LIKE 'cornable_id'[0m
+  [4;36;1mSQL (138.7ms)[0m   [0;1mALTER TABLE `cron_jobs` CHANGE `cornable_id` `cronable_id` int(11) NOT NULL[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mSHOW FIELDS FROM `cron_jobs`[0m
+  [4;36;1mSQL (134.1ms)[0m   [0;1mALTER TABLE `cron_jobs` CHANGE `cronable_type` `cronable_type` varchar(255) DEFAULT NULL[0m
+  [4;35;1mSQL (2.8ms)[0m   [0mSHOW FIELDS FROM `cron_jobs`[0m
+  [4;36;1mSQL (139.7ms)[0m   [0;1mALTER TABLE `cron_jobs` CHANGE `cronable_id` `cronable_id` int(11) DEFAULT NULL[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090112121153')[0m
+Migrating to RemoveDraftFromCalendarEvents (20090114183700)
+  [4;36;1mSQL (135.1ms)[0m   [0;1mALTER TABLE `calendar_events` DROP `draft`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090114183700')[0m
+Migrating to AddDraftToIssue (20090115095647)
+  [4;36;1mSQL (137.7ms)[0m   [0;1mALTER TABLE `issues` ADD `draft` int(11) DEFAULT 1[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090115095647')[0m
+Migrating to AddCronJobAttributes (20090115131518)
+  [4;36;1mSQL (135.4ms)[0m   [0;1mALTER TABLE `cron_jobs` DROP `due_at`[0m
+  [4;35;1mSQL (155.1ms)[0m   [0mALTER TABLE `cron_jobs` ADD `minute` varchar(255) DEFAULT '*'[0m
+  [4;36;1mSQL (131.7ms)[0m   [0;1mALTER TABLE `cron_jobs` ADD `hour` varchar(255) DEFAULT '*'[0m
+  [4;35;1mSQL (132.3ms)[0m   [0mALTER TABLE `cron_jobs` ADD `day` varchar(255) DEFAULT '*'[0m
+  [4;36;1mSQL (142.4ms)[0m   [0;1mALTER TABLE `cron_jobs` ADD `month` varchar(255) DEFAULT '*'[0m
+  [4;35;1mSQL (133.8ms)[0m   [0mALTER TABLE `cron_jobs` ADD `weekday` varchar(255) DEFAULT '*'[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090115131518')[0m
+Migrating to RenameCronJobToCronjob (20090115190041)
+  [4;35;1mSQL (1.3ms)[0m   [0mRENAME TABLE `cron_jobs` TO `cronjobs`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090115190041')[0m
+Migrating to AddCronIdToCronjobs (20090115230142)
+  [4;35;1mSQL (184.3ms)[0m   [0mALTER TABLE `cronjobs` ADD `cron_id` varchar(255)[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090115230142')[0m
+Migrating to CreateThemesTables (20090115230153)
+  [4;35;1mSQL (1.9ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (151.1ms)[0m   [0;1mCREATE TABLE `themes` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `name` varchar(255), `theme_id` varchar(255), `author` varchar(255), `version` varchar(255), `homepage` varchar(255), `summary` text, `active` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (1.8ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (171.6ms)[0m   [0;1mCREATE TABLE `theme_files` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `theme_id` int(11), `type` varchar(255), `name` varchar(255), `directory` varchar(255), `data_file_name` varchar(255), `data_content_type` varchar(255), `data_file_size` int(11), `data_updated_at` datetime, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090115230153')[0m
+Migrating to AddEmailAndPublishedToNewsletter (20090116091232)
+  [4;36;1mSQL (139.8ms)[0m   [0;1mALTER TABLE `newsletters` ADD `email` varchar(255)[0m
+  [4;35;1mSQL (122.0ms)[0m   [0mALTER TABLE `newsletters` ADD `published` int(11) DEFAULT 1[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090116091232')[0m
+Migrating to AddBodyHtmlToIssue (20090119105945)
+  [4;35;1mSQL (125.3ms)[0m   [0mALTER TABLE `issues` ADD `body_html` text[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090119105945')[0m
+Migrating to AddFilterToIssue (20090119113903)
+  [4;35;1mSQL (125.0ms)[0m   [0mALTER TABLE `issues` ADD `filter` varchar(255)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090119113903')[0m
+Migrating to AddAllDayToCalendarEvents (20090119352500)
+  [4;35;1mSQL (127.7ms)[0m   [0mALTER TABLE `calendar_events` ADD `all_day` tinyint(1) DEFAULT 0 NOT NULL[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090119352500')[0m
+Migrating to RemoveDraftAndAddDeliveredAtToIssue (20090121122417)
+  [4;35;1mSQL (147.1ms)[0m   [0mALTER TABLE `issues` DROP `draft`[0m
+  [4;36;1mSQL (120.5ms)[0m   [0;1mALTER TABLE `issues` ADD `delivered_at` datetime[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090121122417')[0m
+Migrating to AddQueuedAtToIssue (20090121140433)
+  [4;36;1mSQL (135.1ms)[0m   [0;1mALTER TABLE `issues` ADD `queued_at` datetime[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090121140433')[0m
+Migrating to AddStateToIssue (20090121142453)
+  [4;36;1mSQL (137.5ms)[0m   [0;1mALTER TABLE `issues` ADD `state` varchar(255) DEFAULT 'draft'[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090121142453')[0m
+Migrating to AddNameToNewsletters (20090122135822)
+  [4;36;1mSQL (137.3ms)[0m   [0;1mALTER TABLE `newsletters` ADD `name` varchar(255)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090122135822')[0m
+Migrating to CreateUrlHistoryEntriesTable (20090126133510)
+  [4;36;1mSQL (2.0ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (162.2ms)[0m   [0mCREATE TABLE `url_history_entries` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `url` varchar(255), `params` text, `resource_id` int(11), `resource_type` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090126133510')[0m
+Migrating to RenameIssueDeliverAt (20090129143648)
+  [4;35;1mSQL (2.9ms)[0m   [0mSHOW FIELDS FROM `issues`[0m
+  [4;36;1mSQL (1.4ms)[0m   [0;1mSHOW COLUMNS FROM `issues` LIKE 'publish_at'[0m
+  [4;35;1mSQL (131.7ms)[0m   [0mALTER TABLE `issues` CHANGE `publish_at` `deliver_at` datetime DEFAULT NULL[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090129143648')[0m
+Migrating to MovePhotosToPaperclip (20090208083237)
+  [4;35;1mSQL (140.0ms)[0m   [0mALTER TABLE `photos` ADD `data_file_name` varchar(255)[0m
+  [4;36;1mSQL (154.3ms)[0m   [0;1mALTER TABLE `photos` ADD `data_content_type` varchar(255)[0m
+  [4;35;1mSQL (133.9ms)[0m   [0mALTER TABLE `photos` ADD `data_file_size` int(11)[0m
+  [4;36;1mSQL (131.9ms)[0m   [0;1mALTER TABLE `photos` ADD `data_updated_at` datetime[0m
+  [4;35;1mSQL (130.1ms)[0m   [0mALTER TABLE `photos` DROP `type`[0m
+  [4;36;1mSQL (120.8ms)[0m   [0;1mALTER TABLE `photos` DROP `position`[0m
+  [4;35;1mSQL (146.3ms)[0m   [0mALTER TABLE `photos` DROP `filter`[0m
+  [4;36;1mSQL (176.8ms)[0m   [0;1mALTER TABLE `photos` DROP `content_type`[0m
+  [4;35;1mSQL (174.1ms)[0m   [0mALTER TABLE `photos` DROP `filename`[0m
+  [4;36;1mSQL (133.1ms)[0m   [0;1mALTER TABLE `photos` DROP `thumbnail`[0m
+  [4;35;1mSQL (131.2ms)[0m   [0mALTER TABLE `photos` DROP `size`[0m
+  [4;36;1mSQL (133.2ms)[0m   [0;1mALTER TABLE `photos` DROP `width`[0m
+  [4;35;1mSQL (175.4ms)[0m   [0mALTER TABLE `photos` DROP `height`[0m
+  [4;36;1mSQL (133.3ms)[0m   [0;1mALTER TABLE `photos` DROP `thumbnails_count`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090208083237')[0m
+Migrating to MoveAssetsToPaperclip (20090208090636)
+  [4;36;1mSQL (124.3ms)[0m   [0;1mALTER TABLE `asset_assignments` DROP `content_type`[0m
+  [4;35;1mSQL (133.4ms)[0m   [0mALTER TABLE `assets` ADD `data_file_name` varchar(255)[0m
+  [4;36;1mSQL (122.7ms)[0m   [0;1mALTER TABLE `assets` ADD `data_content_type` varchar(255)[0m
+  [4;35;1mSQL (163.5ms)[0m   [0mALTER TABLE `assets` ADD `data_file_size` int(11)[0m
+  [4;36;1mSQL (119.8ms)[0m   [0;1mALTER TABLE `assets` ADD `data_updated_at` datetime[0m
+  [4;35;1mSQL (121.5ms)[0m   [0mALTER TABLE `assets` DROP `parent_id`[0m
+  [4;36;1mSQL (154.4ms)[0m   [0;1mALTER TABLE `assets` DROP `size`[0m
+  [4;35;1mSQL (134.9ms)[0m   [0mALTER TABLE `assets` DROP `thumbnail`[0m
+  [4;36;1mSQL (162.7ms)[0m   [0;1mALTER TABLE `assets` DROP `width`[0m
+  [4;35;1mSQL (150.3ms)[0m   [0mALTER TABLE `assets` DROP `height`[0m
+  [4;36;1mSQL (137.2ms)[0m   [0;1mALTER TABLE `assets` DROP `thumbnails_count`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090208090636')[0m
+Migrating to RenameCategoryAssignmentToCategorization (20090216114034)
+  [4;36;1mSQL (1.4ms)[0m   [0;1mRENAME TABLE `category_assignments` TO `categorizations`[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mSHOW FIELDS FROM `categorizations`[0m
+  [4;36;1mSQL (2.3ms)[0m   [0;1mSHOW COLUMNS FROM `categorizations` LIKE 'content_type'[0m
+  [4;35;1mSQL (127.0ms)[0m   [0mALTER TABLE `categorizations` CHANGE `content_type` `categorizable_type` varchar(255) DEFAULT NULL[0m
+  [4;36;1mSQL (1.7ms)[0m   [0;1mSHOW FIELDS FROM `categorizations`[0m
+  [4;35;1mSQL (1.6ms)[0m   [0mSHOW COLUMNS FROM `categorizations` LIKE 'content_id'[0m
+  [4;36;1mSQL (116.9ms)[0m   [0;1mALTER TABLE `categorizations` CHANGE `content_id` `categorizable_id` int(11) DEFAULT NULL[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090216114034')[0m
+Migrating to AddSubscriptionsConfirmedAt (20090217092800)
+  [4;36;1mSQL (131.6ms)[0m   [0;1mALTER TABLE `subscriptions` ADD `confirmed_at` datetime[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090217092800')[0m
+Migrating to AddLocationToCalendarEvents (20090217102300)
+  [4;36;1mSQL (156.7ms)[0m   [0;1mALTER TABLE `calendar_events` ADD `location` varchar(255)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090217102300')[0m
+Migrating to AddMetatagsToContents (20090218083515)
+  [4;36;1mSQL (146.9ms)[0m   [0;1mALTER TABLE `contents` ADD `meta_author` varchar(255)[0m
+  [4;35;1mSQL (143.0ms)[0m   [0mALTER TABLE `contents` ADD `meta_geourl` varchar(255)[0m
+  [4;36;1mSQL (144.8ms)[0m   [0;1mALTER TABLE `contents` ADD `meta_copyright` varchar(255)[0m
+  [4;35;1mSQL (120.6ms)[0m   [0mALTER TABLE `contents` ADD `meta_keywords` varchar(255)[0m
+  [4;36;1mSQL (153.1ms)[0m   [0;1mALTER TABLE `contents` ADD `meta_description` text[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090218083515')[0m
+Migrating to RenameLastCommentIdToLastPostId (20090228224221)
+  [4;36;1mSQL (2.5ms)[0m   [0;1mSHOW FIELDS FROM `boards`[0m
+  [4;35;1mSQL (1.7ms)[0m   [0mSHOW COLUMNS FROM `boards` LIKE 'last_comment_id'[0m
+  [4;36;1mSQL (117.5ms)[0m   [0;1mALTER TABLE `boards` CHANGE `last_comment_id` `last_post_id` int(11) DEFAULT NULL[0m
+  [4;35;1mSQL (2.7ms)[0m   [0mSHOW FIELDS FROM `topics`[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mSHOW COLUMNS FROM `topics` LIKE 'last_comment_id'[0m
+  [4;35;1mSQL (138.3ms)[0m   [0mALTER TABLE `topics` CHANGE `last_comment_id` `last_post_id` int(11) DEFAULT NULL[0m
+  [4;36;1mSQL (135.5ms)[0m   [0;1mALTER TABLE `topics` DROP `comments_count`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090228224221')[0m
+Migrating to MoveSectionsToPages (20090305123429)
+  [4;36;1mSection Update (0.6ms)[0m   [0;1mUPDATE `sections` SET type = 'Page' WHERE (type = 'Section' OR type IS NULL) [0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090305123429')[0m
+Migrating to AddCachedTagListToCalendarEvents (20090308184508)
+  [4;36;1mSQL (140.9ms)[0m   [0;1mALTER TABLE `calendar_events` ADD `cached_tag_list` varchar(255)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090308184508')[0m
+Migrating to AddCachedTagListToAssets (20090308190842)
+  [4;36;1mSQL (149.2ms)[0m   [0;1mALTER TABLE `assets` ADD `cached_tag_list` varchar(255)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090308190842')[0m
+Migrating to AddAssertableTypeAndId (20090511121758)
+  [4;36;1mSQL (146.1ms)[0m   [0;1mALTER TABLE `assets` ADD `assetable_type` varchar(255)[0m
+  [4;35;1mSQL (120.1ms)[0m   [0mALTER TABLE `assets` ADD `assetable_id` int(11)[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090511121758')[0m
+Migrating to RemoveTypeFromNewsletterAndIssue (20090514123939)
+  [4;35;1mSQL (173.5ms)[0m   [0mALTER TABLE `newsletters` DROP `type`[0m
+  [4;36;1mSQL (370.4ms)[0m   [0;1mALTER TABLE `issues` DROP `type`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090514123939')[0m
+Migrating to RenameIssuesToAdvaIssues (20090514152101)
+  [4;36;1mSQL (16.4ms)[0m   [0;1mRENAME TABLE `issues` TO `adva_issues`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090514152101')[0m
+Migrating to RenameSubscriptionToAdvaSubscription (20090514164106)
+  [4;36;1mSQL (1.4ms)[0m   [0;1mRENAME TABLE `subscriptions` TO `adva_subscriptions`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090514164106')[0m
+Migrating to AddAdvaPrefixToRestOfNewsletter (20090515110115)
+  [4;36;1mSQL (196.6ms)[0m   [0;1mRENAME TABLE `cronjobs` TO `adva_cronjobs`[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mRENAME TABLE `emails` TO `adva_emails`[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mRENAME TABLE `newsletters` TO `adva_newsletters`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090515110115')[0m
+Migrating to AddPublishedAtToSections (20090519132700)
+  [4;36;1mSQL (188.3ms)[0m   [0;1mALTER TABLE `sections` ADD `published_at` datetime[0m
+  [4;35;1mSection Load (0.7ms)[0m   [0mSELECT * FROM `sections` ORDER BY lft[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090519132700')[0m
+Migrating to AddMetatagsToSites (20090522082000)
+  [4;35;1mSQL (147.1ms)[0m   [0mALTER TABLE `sites` ADD `meta_author` varchar(255)[0m
+  [4;36;1mSQL (164.8ms)[0m   [0;1mALTER TABLE `sites` ADD `meta_geourl` varchar(255)[0m
+  [4;35;1mSQL (142.9ms)[0m   [0mALTER TABLE `sites` ADD `meta_copyright` varchar(255)[0m
+  [4;36;1mSQL (132.9ms)[0m   [0;1mALTER TABLE `sites` ADD `meta_keywords` varchar(255)[0m
+  [4;35;1mSQL (155.0ms)[0m   [0mALTER TABLE `sites` ADD `meta_description` text[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090522082000')[0m
+Migrating to AddBodyPlainToAdvaIssues (20090616110514)
+  [4;35;1mSQL (124.3ms)[0m   [0mALTER TABLE `adva_issues` ADD `body_plain` text[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090616110514')[0m
+Migrating to CreateAccounts (20090625124502)
+  [4;35;1mSQL (148.2ms)[0m   [0mCREATE TABLE `accounts` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (40.9ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090625124502')[0m
+Migrating to AddAccountToUser (20090625133231)
+  [4;35;1mSQL (147.3ms)[0m   [0mALTER TABLE `users` ADD `account_id` int(11)[0m
+  [4;36;1mSQL (165.0ms)[0m   [0;1mCREATE INDEX `index_users_on_account_id` ON `users` (`account_id`)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090625133231')[0m
+Migrating to CreateSectionTranslations (20090702085459)
+  [4;36;1mSQL (152.8ms)[0m   [0;1mCREATE TABLE `section_translations` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `section_id` int(11), `locale` varchar(255), `title` varchar(255), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (135.9ms)[0m   [0mCREATE INDEX `index_section_translations_on_section_id` ON `section_translations` (`section_id`)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090702085459')[0m
+Migrating to CreateCategoryTranslations (20090702200226)
+  [4;35;1mSQL (133.3ms)[0m   [0mCREATE TABLE `category_translations` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `category_id` int(11), `locale` varchar(255), `title` varchar(255), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (135.5ms)[0m   [0;1mCREATE INDEX `index_category_translations_on_category_id` ON `category_translations` (`category_id`)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090702200226')[0m
+Migrating to UpgradePaperclipPaths (20090707171100)
+  [4;36;1mSite Load (0.7ms)[0m   [0;1mSELECT * FROM `sites` [0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090707171100')[0m
+Migrating to AddEmailNotificationToSite (20090709111934)
+  [4;36;1mSQL (142.0ms)[0m   [0;1mALTER TABLE `sites` ADD `email_notification` tinyint(1) DEFAULT 0[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090709111934')[0m
+Migrating to MigrateRolesTableToNewRbac (20090720132900)
+  [4;36;1mSQL (2.0ms)[0m   [0;1mSHOW FIELDS FROM `roles`[0m
+  [4;35;1mSQL (1.6ms)[0m   [0mSHOW COLUMNS FROM `roles` LIKE 'type'[0m
+  [4;36;1mSQL (160.3ms)[0m   [0;1mALTER TABLE `roles` CHANGE `type` `name` varchar(25) DEFAULT NULL[0m
+  [4;35;1mSQL (134.9ms)[0m   [0mALTER TABLE `roles` ADD `ancestor_context_id` int(11)[0m
+  [4;36;1mSQL (132.6ms)[0m   [0;1mALTER TABLE `roles` ADD `ancestor_context_type` varchar(255)[0m
+  [4;35;1mRbac::Role Load (0.5ms)[0m   [0mSELECT * FROM `roles` [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090720132900')[0m
+Migrating to AddTimestampsToSections (20100215123034)
+  [4;35;1mSQL (135.3ms)[0m   [0mALTER TABLE `sections` ADD `created_at` datetime[0m
+  [4;36;1mSQL (131.4ms)[0m   [0;1mALTER TABLE `sections` ADD `updated_at` datetime[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100215123034')[0m
+Migrating to AddIndexesForPageCachingTables (20100302135500)
+  [4;36;1mSQL (125.3ms)[0m   [0;1mCREATE INDEX `index_cached_pages_on_site_id_and_url` ON `cached_pages` (`site_id`, `url`)[0m
+  [4;35;1mSQL (134.6ms)[0m   [0mCREATE INDEX `index_cached_page_references_on_object_id_and_object_type` ON `cached_page_references` (`object_id`, `object_type`)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100302135500')[0m
+Migrating to AddLocaleToSite (20100318122325)
+  [4;35;1mSQL (156.5ms)[0m   [0mALTER TABLE `sites` ADD `locale` varchar(255)[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100318122325')[0m
+Migrating to AddIndicesToContentsAndSections (20100323090000)
+  [4;35;1mSQL (146.9ms)[0m   [0mCREATE INDEX `index_content_translations_on_content_id` ON `content_translations` (`content_id`)[0m
+  [4;36;1mSQL (134.0ms)[0m   [0;1mCREATE INDEX `index_contents_on_section_id` ON `contents` (`section_id`)[0m
+  [4;35;1mSQL (121.5ms)[0m   [0mCREATE INDEX `index_sections_on_parent_id` ON `sections` (`parent_id`)[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100323090000')[0m
+  [4;35;1mSQL (2.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (1.9ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (1.8ms)[0m   [0;1mSHOW FIELDS FROM `accounts`[0m
+  [4;35;1mSQL (3.1ms)[0m   [0mdescribe `accounts`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW KEYS FROM `accounts`[0m
+  [4;35;1mSQL (2.3ms)[0m   [0mSHOW FIELDS FROM `activities`[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mdescribe `activities`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW KEYS FROM `activities`[0m
+  [4;36;1mSQL (2.2ms)[0m   [0;1mSHOW FIELDS FROM `adva_cronjobs`[0m
+  [4;35;1mSQL (2.3ms)[0m   [0mdescribe `adva_cronjobs`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW KEYS FROM `adva_cronjobs`[0m
+  [4;35;1mSQL (1.8ms)[0m   [0mSHOW FIELDS FROM `adva_emails`[0m
+  [4;36;1mSQL (2.2ms)[0m   [0;1mdescribe `adva_emails`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW KEYS FROM `adva_emails`[0m
+  [4;36;1mSQL (2.9ms)[0m   [0;1mSHOW FIELDS FROM `adva_issues`[0m
+  [4;35;1mSQL (3.1ms)[0m   [0mdescribe `adva_issues`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW KEYS FROM `adva_issues`[0m
+  [4;35;1mSQL (2.3ms)[0m   [0mSHOW FIELDS FROM `adva_newsletters`[0m
+  [4;36;1mSQL (2.5ms)[0m   [0;1mdescribe `adva_newsletters`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW KEYS FROM `adva_newsletters`[0m
+  [4;36;1mSQL (1.9ms)[0m   [0;1mSHOW FIELDS FROM `adva_subscriptions`[0m
+  [4;35;1mSQL (2.1ms)[0m   [0mdescribe `adva_subscriptions`[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mSHOW KEYS FROM `adva_subscriptions`[0m
+  [4;35;1mSQL (2.2ms)[0m   [0mSHOW FIELDS FROM `asset_assignments`[0m
+  [4;36;1mSQL (2.7ms)[0m   [0;1mdescribe `asset_assignments`[0m
+  [4;35;1mSQL (1.5ms)[0m   [0mSHOW KEYS FROM `asset_assignments`[0m
+  [4;36;1mSQL (2.3ms)[0m   [0;1mSHOW FIELDS FROM `assets`[0m
+  [4;35;1mSQL (2.6ms)[0m   [0mdescribe `assets`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW KEYS FROM `assets`[0m
+  [4;35;1mSQL (2.1ms)[0m   [0mSHOW FIELDS FROM `boards`[0m
+  [4;36;1mSQL (2.6ms)[0m   [0;1mdescribe `boards`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW KEYS FROM `boards`[0m
+  [4;36;1mSQL (1.8ms)[0m   [0;1mSHOW FIELDS FROM `cached_page_references`[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mdescribe `cached_page_references`[0m
+  [4;36;1mSQL (11.4ms)[0m   [0;1mSHOW KEYS FROM `cached_page_references`[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mSHOW FIELDS FROM `cached_pages`[0m
+  [4;36;1mSQL (2.2ms)[0m   [0;1mdescribe `cached_pages`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW KEYS FROM `cached_pages`[0m
+  [4;36;1mSQL (2.6ms)[0m   [0;1mSHOW FIELDS FROM `calendar_events`[0m
+  [4;35;1mSQL (2.5ms)[0m   [0mdescribe `calendar_events`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW KEYS FROM `calendar_events`[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mSHOW FIELDS FROM `categories`[0m
+  [4;36;1mSQL (2.2ms)[0m   [0;1mdescribe `categories`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW KEYS FROM `categories`[0m
+  [4;36;1mSQL (1.9ms)[0m   [0;1mSHOW FIELDS FROM `categorizations`[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mdescribe `categorizations`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW KEYS FROM `categorizations`[0m
+  [4;35;1mSQL (1.9ms)[0m   [0mSHOW FIELDS FROM `category_translations`[0m
+  [4;36;1mSQL (2.1ms)[0m   [0;1mdescribe `category_translations`[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW KEYS FROM `category_translations`[0m
+  [4;36;1mSQL (2.7ms)[0m   [0;1mSHOW FIELDS FROM `comments`[0m
+  [4;35;1mSQL (2.5ms)[0m   [0mdescribe `comments`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW KEYS FROM `comments`[0m
+  [4;35;1mSQL (2.2ms)[0m   [0mSHOW FIELDS FROM `content_translations`[0m
+  [4;36;1mSQL (2.3ms)[0m   [0;1mdescribe `content_translations`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `content_translations`[0m
+  [4;36;1mSQL (3.1ms)[0m   [0;1mSHOW FIELDS FROM `contents`[0m
+  [4;35;1mSQL (3.5ms)[0m   [0mdescribe `contents`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW KEYS FROM `contents`[0m
+  [4;35;1mSQL (1.8ms)[0m   [0mSHOW FIELDS FROM `counters`[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mdescribe `counters`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW KEYS FROM `counters`[0m
+  [4;36;1mSQL (1.8ms)[0m   [0;1mSHOW FIELDS FROM `memberships`[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mdescribe `memberships`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW KEYS FROM `memberships`[0m
+  [4;35;1mSQL (2.6ms)[0m   [0mSHOW FIELDS FROM `photos`[0m
+  [4;36;1mSQL (2.7ms)[0m   [0;1mdescribe `photos`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW KEYS FROM `photos`[0m
+  [4;36;1mSQL (2.5ms)[0m   [0;1mSHOW FIELDS FROM `plugin_configs`[0m
+  [4;35;1mSQL (2.1ms)[0m   [0mdescribe `plugin_configs`[0m
+  [4;36;1mSQL (1.7ms)[0m   [0;1mSHOW KEYS FROM `plugin_configs`[0m
+  [4;35;1mSQL (1.7ms)[0m   [0mSHOW FIELDS FROM `roles`[0m
+  [4;36;1mSQL (3.1ms)[0m   [0;1mdescribe `roles`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `roles`[0m
+  [4;36;1mSQL (1.8ms)[0m   [0;1mSHOW FIELDS FROM `section_translations`[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mdescribe `section_translations`[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mSHOW KEYS FROM `section_translations`[0m
+  [4;35;1mSQL (2.7ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mSQL (3.3ms)[0m   [0;1mdescribe `sections`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW KEYS FROM `sections`[0m
+  [4;36;1mSQL (2.9ms)[0m   [0;1mSHOW FIELDS FROM `sites`[0m
+  [4;35;1mSQL (3.1ms)[0m   [0mdescribe `sites`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW KEYS FROM `sites`[0m
+  [4;35;1mSQL (1.8ms)[0m   [0mSHOW FIELDS FROM `spam_reports`[0m
+  [4;36;1mSQL (2.1ms)[0m   [0;1mdescribe `spam_reports`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `spam_reports`[0m
+  [4;36;1mSQL (1.9ms)[0m   [0;1mSHOW FIELDS FROM `taggings`[0m
+  [4;35;1mSQL (2.0ms)[0m   [0mdescribe `taggings`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW KEYS FROM `taggings`[0m
+  [4;35;1mSQL (1.5ms)[0m   [0mSHOW FIELDS FROM `tags`[0m
+  [4;36;1mSQL (1.8ms)[0m   [0;1mdescribe `tags`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW KEYS FROM `tags`[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mSHOW FIELDS FROM `theme_files`[0m
+  [4;35;1mSQL (2.2ms)[0m   [0mdescribe `theme_files`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW KEYS FROM `theme_files`[0m
+  [4;35;1mSQL (1.9ms)[0m   [0mSHOW FIELDS FROM `themes`[0m
+  [4;36;1mSQL (2.4ms)[0m   [0;1mdescribe `themes`[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW KEYS FROM `themes`[0m
+  [4;36;1mSQL (2.3ms)[0m   [0;1mSHOW FIELDS FROM `topics`[0m
+  [4;35;1mSQL (2.5ms)[0m   [0mdescribe `topics`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW KEYS FROM `topics`[0m
+  [4;35;1mSQL (1.8ms)[0m   [0mSHOW FIELDS FROM `url_history_entries`[0m
+  [4;36;1mSQL (1.9ms)[0m   [0;1mdescribe `url_history_entries`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `url_history_entries`[0m
+  [4;36;1mSQL (2.4ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mSQL (2.5ms)[0m   [0mdescribe `users`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW KEYS FROM `users`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (2.5ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (0.3ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`host` = 'localhost:3000') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`host` = 'localhost:3000') LIMIT 1[0m
+
+
+Processing Admin::InstallController#index (for 127.0.0.1 at 2010-04-09 14:21:47) [GET]
+  Parameters: {"action"=>"index", "controller"=>"admin/install"}
+  [4;36;1mSite Load (0.5ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mUser Load (0.3ms)[0m   [0mSELECT * FROM `users` LIMIT 1[0m
+  [4;36;1mPage Columns (2.3ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+WARNING: Can't mass-assign these protected attributes: type
+  [4;35;1mUser Columns (2.4ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+Rendering template within layouts/simple
+Rendering admin/install/index
+Rendered shared/_flash (1.4ms)
+Completed in 177ms (View: 112, DB: 9) | 200 OK [http://localhost/]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (2.9ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (0.3ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`host` = 'localhost:3000') LIMIT 1[0m
+
+
+Processing Admin::InstallController#index (for 127.0.0.1 at 2010-04-09 14:26:08) [POST]
+  Parameters: {"user"=>{"password"=>"[FILTERED]", "email"=>"will@localwrkx.com"}, "commit"=>"Create site & account »", "action"=>"index", "authenticity_token"=>"mXvLGcRx/jmOnZG2XxGOsydhukAef4MKNqKAVdqU5JE=", "controller"=>"admin/install", "site"=>{"name"=>"Nashville Ruby Group"}, "section"=>{"title"=>"Home", "type"=>"Blog"}}
+  [4;36;1mSite Load (0.3ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mUser Load (0.2ms)[0m   [0mSELECT * FROM `users` LIMIT 1[0m
+  [4;36;1mBlog Columns (2.2ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+WARNING: Can't mass-assign these protected attributes: type
+  [4;35;1mUser Columns (2.3ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mBlog Load (0.5ms)[0m   [0;1mSELECT * FROM `sections` WHERE (permalink LIKE 'home%' and site_id is null and parent_id is null) AND ( (`sections`.`type` = 'Blog' ) ) ORDER BY lft[0m
+  [4;35;1mSection Columns (2.1ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mSection Load (17.3ms)[0m   [0;1mSELECT `sections`.id FROM `sections` WHERE (`sections`.`permalink` = BINARY 'home' AND `sections`.site_id IS NULL AND `sections`.parent_id IS NULL) LIMIT 1[0m
+  [4;35;1mSite Load (0.3ms)[0m   [0mSELECT `sites`.id FROM `sites` WHERE (`sites`.`host` = BINARY 'localhost:3000') LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (permalink LIKE 'home%' and site_id is null and parent_id is null) AND ( (`sections`.`type` = 'Blog' ) ) ORDER BY lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT `sections`.id FROM `sections` WHERE (`sections`.`permalink` = BINARY 'home' AND `sections`.site_id IS NULL AND `sections`.parent_id IS NULL) LIMIT 1[0m
+  [4;36;1mUser Load (0.3ms)[0m   [0;1mSELECT `users`.id FROM `users` WHERE (`users`.`email` = BINARY 'will@localwrkx.com') LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (permalink LIKE 'home%' and site_id is null and parent_id is null) AND ( (`sections`.`type` = 'Blog' ) ) ORDER BY lft[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT `sections`.id FROM `sections` WHERE (`sections`.`permalink` = BINARY 'home' AND `sections`.site_id IS NULL AND `sections`.parent_id IS NULL) LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT `sites`.id FROM `sites` WHERE (`sites`.`host` = BINARY 'localhost:3000') LIMIT 1[0m
+  [4;36;1mSite Create (0.9ms)[0m   [0;1mINSERT INTO `sites` (`name`, `google_analytics_tracking_code`, `title`, `akismet_url`, `meta_copyright`, `timezone`, `tag_path`, `email_notification`, `meta_keywords`, `meta_author`, `subtitle`, `approve_comments`, `comment_filter`, `search_path`, `meta_geourl`, `meta_description`, `theme_names`, `permalink_style`, `host`, `akismet_key`, `tag_layout`, `permissions`, `spam_options`, `locale`, `comment_age`, `email`, `ping_urls`) VALUES('Nashville Ruby Group', NULL, 'Nashville Ruby Group', NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'localhost:3000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)[0m
+  [4;35;1mBlog Load (0.4ms)[0m   [0mSELECT * FROM `sections` WHERE (permalink LIKE 'home%' and site_id = 1 and parent_id is null) AND ( (`sections`.`type` = 'Blog' ) ) ORDER BY lft[0m
+  [4;36;1mSection Load (0.2ms)[0m   [0;1mSELECT `sections`.id FROM `sections` WHERE (`sections`.`permalink` = BINARY 'home' AND `sections`.site_id = 1 AND `sections`.parent_id IS NULL) LIMIT 1[0m
+  [4;35;1mSection Load (0.3ms)[0m   [0mSELECT * FROM `sections` WHERE ((lft < 0 AND rgt > 0) AND (`sections`.`site_id` = 1)) ORDER BY lft[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT max(`sections`.rgt) AS max_rgt FROM `sections` WHERE (`sections`.`site_id` = 1) [0m
+  [4;35;1mBlog Create (0.7ms)[0m   [0mINSERT INTO `sections` (`permalink`, `site_id`, `options`, `content_filter`, `updated_at`, `title`, `contents_count`, `type`, `lft`, `template`, `permissions`, `published_at`, `parent_id`, `rgt`, `path`, `comment_age`, `layout`, `created_at`) VALUES('home', 1, '--- {}\n\n', NULL, '2010-04-09 19:26:09', 'Home', NULL, 'Blog', 1, NULL, NULL, '2010-04-09 19:26:09', NULL, 2, 'home', -1, NULL, '2010-04-09 19:26:09')[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSectionTranslation Columns (1.7ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mSectionTranslation Load (0.3ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.`locale` = 'en') AND (`section_translations`.section_id = 1) LIMIT 1[0m
+  [4;35;1mSectionTranslation Create (0.2ms)[0m   [0mINSERT INTO `section_translations` (`updated_at`, `title`, `section_id`, `locale`, `created_at`) VALUES('2010-04-09 19:26:09', 'Home', 1, 'en', '2010-04-09 19:26:09')[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mUser Create (0.6ms)[0m   [0mINSERT INTO `users` (`updated_at`, `signature`, `account_id`, `token_key`, `verified_at`, `deleted_at`, `password_salt`, `about`, `referer`, `anonymous`, `homepage`, `password_hash`, `ip`, `first_name`, `last_name`, `agent`, `email`, `remember_me`, `token_expiration`, `created_at`) VALUES('2010-04-09 19:26:09', NULL, NULL, NULL, '2010-04-09 19:26:09', NULL, '07c5eb45634fd84234c55d6fc42d626dc4fe5788', NULL, NULL, 0, NULL, '0c56192801e341188ea461c186231457d9865f50', NULL, 'will', NULL, NULL, 'will@localwrkx.com', NULL, NULL, '2010-04-09 19:26:09')[0m
+  [4;36;1mRbac::Role Columns (1.6ms)[0m   [0;1mSHOW FIELDS FROM `roles`[0m
+  [4;35;1mRbac::Role Create (0.6ms)[0m   [0mINSERT INTO `roles` (`context_id`, `name`, `context_type`, `ancestor_context_type`, `ancestor_context_id`, `user_id`) VALUES(NULL, 'superuser', NULL, NULL, NULL, 1)[0m
+  [4;36;1mUser Load (0.3ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`email` = 'will@localwrkx.com') LIMIT 1[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM `users` WHERE (id = 1 AND password_hash = '0c56192801e341188ea461c186231457d9865f50' AND verified_at IS NOT NULL) [0m
+  [4;36;1mSite Load (0.3ms)[0m   [0;1mSELECT `sites`.id FROM `sites` WHERE (`sites`.`host` = BINARY 'localhost:3000' AND `sites`.id <> 1) LIMIT 1[0m
+  [4;35;1mSite Update (17.4ms)[0m   [0mUPDATE `sites` SET `title` = 'Nashville Ruby Group', `host` = 'localhost:3000', `spam_options` = NULL, `permissions` = NULL, `email` = 'will@localwrkx.com', `name` = 'Nashville Ruby Group' WHERE `id` = 1[0m
+Rendering template within layouts/simple
+Rendering admin/install/confirmation
+Rendered shared/_flash (0.2ms)
+Completed in 685ms (View: 40, DB: 56) | 200 OK [http://localhost/admin/install]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (2.7ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (0.2ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (0.3ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSection Columns (2.0ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mBlog Columns (2.2ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::SitesController#show (for 127.0.0.1 at 2010-04-09 14:26:12) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mSite Load (0.5ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mUser Columns (2.9ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (0.3ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mMembership Columns (1.9ms)[0m   [0mSHOW FIELDS FROM `memberships`[0m
+  [4;36;1mUser Load Including Associations (0.6ms)[0m   [0;1mSELECT `users`.`id` AS t0_r0, `users`.`first_name` AS t0_r1, `users`.`last_name` AS t0_r2, `users`.`email` AS t0_r3, `users`.`homepage` AS t0_r4, `users`.`about` AS t0_r5, `users`.`signature` AS t0_r6, `users`.`password_hash` AS t0_r7, `users`.`password_salt` AS t0_r8, `users`.`ip` AS t0_r9, `users`.`agent` AS t0_r10, `users`.`referer` AS t0_r11, `users`.`remember_me` AS t0_r12, `users`.`token_key` AS t0_r13, `users`.`token_expiration` AS t0_r14, `users`.`anonymous` AS t0_r15, `users`.`created_at` AS t0_r16, `users`.`updated_at` AS t0_r17, `users`.`verified_at` AS t0_r18, `users`.`deleted_at` AS t0_r19, `users`.`account_id` AS t0_r20, `roles`.`id` AS t1_r0, `roles`.`user_id` AS t1_r1, `roles`.`context_id` AS t1_r2, `roles`.`context_type` AS t1_r3, `roles`.`name` AS t1_r4, `roles`.`ancestor_context_id` AS t1_r5, `roles`.`ancestor_context_type` AS t1_r6, `memberships`.`id` AS t2_r0, `memberships`.`site_id` AS t2_r1, `memberships`.`user_id` AS t2_r2, `memberships`.`created_at` AS t2_r3, `memberships`.`updated_at` AS t2_r4 FROM `users` LEFT OUTER JOIN `roles` ON roles.user_id = users.id LEFT OUTER JOIN `memberships` ON memberships.user_id = users.id WHERE (memberships.site_id = 1 OR (memberships.site_id IS NULL AND roles.name = 'superuser')) [0m
+  [4;35;1mComment Load (0.4ms)[0m   [0mSELECT * FROM `comments` WHERE (`comments`.site_id = 1 AND (comments.approved = 0)) ORDER BY comments.created_at, comments.id[0m
+  [4;36;1mActivity Load (0.4ms)[0m   [0;1mSELECT * FROM `activities` WHERE (`activities`.site_id = 1) ORDER BY activities.created_at DESC LIMIT 50[0m
+Rendering template within layouts/admin
+Rendering admin/sites/show
+Rendered admin/activities/_activities (6.2ms)
+Rendered admin/sites/_recent_users (9.0ms)
+Rendered admin/sites/_unapproved_comments (7.5ms)
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSectionTranslation Load (0.4ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;35;1mSectionTranslation Columns (1.6ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (9.1ms)
+Rendered shared/_flash (0.1ms)
+Completed in 539ms (View: 392, DB: 17) | 200 OK [http://localhost/admin/sites/1]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSite Columns (2.8ms)[0m   [0;1mSHOW FIELDS FROM `sites`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mSite Load (0.2ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mSection Load (0.3ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSection Columns (2.0ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mBlog Columns (2.3ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::ArticlesController#index (for 127.0.0.1 at 2010-04-09 14:26:22) [GET]
+  Parameters: {"site_id"=>"1", "section_id"=>"1"}
+  [4;36;1mSite Load (0.4ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mSection Load (0.3ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`id` = 1 AND (`sections`.site_id = 1)) ORDER BY lft, lft[0m
+  [4;36;1mUser Columns (2.2ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.3ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (0.2ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`id` = 1 AND (`sections`.site_id = 1)) ORDER BY lft, lft[0m
+  [4;35;1mArticle Columns (2.3ms)[0m   [0mSHOW FIELDS FROM `contents`[0m
+  [4;36;1mArticle Load (0.4ms)[0m   [0;1mSELECT * FROM `contents` WHERE ((`contents`.section_id = 1) AND (`contents`.section_id = 1)) AND ( (`contents`.`type` = 'Article' ) ) ORDER BY contents.published_at DESC LIMIT 0, 25[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/articles/index
+  [4;35;1mSectionTranslation Load (0.4ms)[0m   [0mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;36;1mSectionTranslation Columns (1.6ms)[0m   [0;1mSHOW FIELDS FROM `section_translations`[0m
+  [4;35;1mSection Load (0.4ms)[0m   [0mSELECT * FROM `sections` ORDER BY lft LIMIT 1[0m
+  [4;36;1mCategory Load (0.4ms)[0m   [0;1mSELECT * FROM `categories` WHERE (`categories`.section_id = 1) ORDER BY lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (80.5ms)
+Rendered shared/_flash (0.2ms)
+Completed in 409ms (View: 376, DB: 17) | 200 OK [http://localhost/admin/sites/1/sections/1/articles]
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (2.5ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (0.2ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (0.3ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSection Columns (2.0ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mBlog Columns (1.9ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::ThemesController#index (for 127.0.0.1 at 2010-04-09 14:35:43) [GET]
+  Parameters: {"site_id"=>"1"}
+  [4;35;1mSite Load (0.4ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mUser Columns (2.4ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (0.3ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/themes/index
+  [4;35;1mTheme Load (0.4ms)[0m   [0mSELECT * FROM `themes` WHERE (`themes`.site_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSectionTranslation Load (0.4ms)[0m   [0mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;36;1mSectionTranslation Columns (1.7ms)[0m   [0;1mSHOW FIELDS FROM `section_translations`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (6.4ms)
+Rendered shared/_flash (0.2ms)
+Completed in 285ms (View: 238, DB: 13) | 200 OK [http://localhost/admin/sites/1/themes]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (3.1ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (0.3ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (0.4ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSection Columns (2.0ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mBlog Columns (2.3ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::ThemesController#new (for 127.0.0.1 at 2010-04-09 14:35:46) [GET]
+  Parameters: {"site_id"=>"1"}
+  [4;35;1mSite Load (0.5ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mUser Columns (2.3ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.3ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (0.2ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mTheme Columns (1.8ms)[0m   [0mSHOW FIELDS FROM `themes`[0m
+Rendering template within layouts/admin
+Rendering admin/themes/new
+Rendered admin/themes/_form (11.2ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSectionTranslation Load (0.5ms)[0m   [0mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;36;1mSectionTranslation Columns (1.7ms)[0m   [0;1mSHOW FIELDS FROM `section_translations`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (6.6ms)
+Rendered shared/_flash (0.1ms)
+Completed in 380ms (View: 328, DB: 16) | 200 OK [http://localhost/admin/sites/1/themes/new]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (2.6ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (5.8ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (0.2ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (0.4ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSection Columns (2.0ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mBlog Columns (2.2ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::ThemesController#create (for 127.0.0.1 at 2010-04-09 14:36:28) [POST]
+  Parameters: {"site_id"=>"1", "commit"=>"Save", "theme"=>{"name"=>"nashrb", "author"=>"Nashville Ruby Group", "summary"=>"Design by Tim Warren and installed by the group", "version"=>"", "theme_id"=>"", "homepage"=>""}, "authenticity_token"=>"mXvLGcRx/jmOnZG2XxGOsydhukAef4MKNqKAVdqU5JE="}
+  [4;35;1mSite Load (0.4ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mUser Columns (2.2ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.3ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (0.2ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mTheme Columns (1.9ms)[0m   [0mSHOW FIELDS FROM `themes`[0m
+  [4;36;1mTheme Load (0.3ms)[0m   [0;1mSELECT * FROM `themes` WHERE (theme_id LIKE 'nashrb%' and site_id = 1) [0m
+  [4;35;1mTheme Create (1.0ms)[0m   [0mINSERT INTO `themes` (`name`, `site_id`, `updated_at`, `author`, `theme_id`, `version`, `summary`, `homepage`, `active`, `created_at`) VALUES('nashrb', 1, '2010-04-09 19:36:28', 'Nashville Ruby Group', 'nashrb', '', 'Design by Tim Warren and installed by the group', '', NULL, '2010-04-09 19:36:28')[0m
+  [4;36;1mSite Load (0.3ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mTheme::Preview Columns (1.8ms)[0m   [0mSHOW FIELDS FROM `theme_files`[0m
+  [4;36;1mTheme::Preview Load (0.3ms)[0m   [0;1mSELECT * FROM `theme_files` WHERE (`theme_files`.theme_id = 1) AND ( (`theme_files`.`type` = 'Theme::Preview' ) ) LIMIT 1[0m
+WARNING: Can't mass-assign these protected attributes: type
+[paperclip] Paperclip attachment data on Theme::Preview initialized.
+[paperclip] Assigning #<File:/Users/will/Desktop/projects/nashvillerb/vendor/plugins/adva_themes/app/models/../../public/images/adva_themes/preview.png> to data
+[paperclip] Writing attributes for data
+[paperclip] Post-processing data
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `theme_files` WHERE (`theme_files`.theme_id = 1) AND ( (`theme_files`.`type` = 'Theme::Preview' ) ) LIMIT 1[0m
+  [4;36;1mTheme::File Columns (1.8ms)[0m   [0;1mSHOW FIELDS FROM `theme_files`[0m
+  [4;35;1mTheme::File Load (0.2ms)[0m   [0mSELECT `theme_files`.id FROM `theme_files` WHERE (`theme_files`.`name` = BINARY 'preview.png' AND `theme_files`.theme_id = 1 AND `theme_files`.directory = 'images') LIMIT 1[0m
+  [4;36;1mTheme::Preview Create (0.7ms)[0m   [0;1mINSERT INTO `theme_files` (`name`, `data_updated_at`, `updated_at`, `directory`, `data_file_name`, `data_content_type`, `type`, `data_file_size`, `theme_id`, `created_at`) VALUES('preview.png', '2010-04-09 19:36:28', '2010-04-09 19:36:28', 'images', 'preview.png', 'image/png', 'Theme::Preview', 8244, 1, '2010-04-09 19:36:28')[0m
+[paperclip] Saving attachments.
+[paperclip] Saving files for data
+[paperclip] Deleting files for data
+[paperclip] Writing files for data
+[paperclip] -> /Users/will/Desktop/projects/nashvillerb/public/sites/site-1/themes/nashrb/images/preview.png
+Redirected to http://localhost:3000/admin/sites/1/themes
+Completed in 160ms (DB: 25) | 302 Found [http://localhost/admin/sites/1/themes]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSite Columns (3.1ms)[0m   [0;1mSHOW FIELDS FROM `sites`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mSite Load (0.3ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mSection Load (0.4ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSection Columns (2.0ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mBlog Columns (2.1ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::ThemesController#index (for 127.0.0.1 at 2010-04-09 14:36:28) [GET]
+  Parameters: {"site_id"=>"1"}
+  [4;36;1mSite Load (0.4ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mUser Columns (2.2ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.3ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mRbac::Role Load (0.3ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/themes/index
+  [4;36;1mTheme Load (0.4ms)[0m   [0;1mSELECT * FROM `themes` WHERE (`themes`.site_id = 1) [0m
+  [4;35;1mTheme Columns (1.9ms)[0m   [0mSHOW FIELDS FROM `themes`[0m
+  [4;36;1mTheme::Preview Columns (2.0ms)[0m   [0;1mSHOW FIELDS FROM `theme_files`[0m
+  [4;35;1mTheme::Preview Load (0.3ms)[0m   [0mSELECT * FROM `theme_files` WHERE (`theme_files`.theme_id = 1) AND ( (`theme_files`.`type` = 'Theme::Preview' ) ) LIMIT 1[0m
+  [4;36;1mTheme Load (0.3ms)[0m   [0;1mSELECT * FROM `themes` WHERE (`themes`.`theme_id` = 'nashrb') AND (`themes`.site_id = 1) LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/themes/_theme (96.2ms)
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSectionTranslation Load (0.4ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;35;1mSectionTranslation Columns (1.6ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (7.1ms)
+Rendered shared/_flash (0.1ms)
+Completed in 325ms (View: 190, DB: 18) | 200 OK [http://localhost/admin/sites/1/themes]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSite Columns (3.0ms)[0m   [0;1mSHOW FIELDS FROM `sites`[0m
+  [4;35;1mSQL (48.2ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mSite Load (0.2ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mSection Load (0.4ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSection Columns (2.1ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mBlog Columns (2.2ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::ThemesController#select (for 127.0.0.1 at 2010-04-09 14:45:13) [POST]
+  Parameters: {"site_id"=>"1", "return_to"=>"http://localhost:3000/admin/sites/1/themes", "authenticity_token"=>"mXvLGcRx/jmOnZG2XxGOsydhukAef4MKNqKAVdqU5JE=", "id"=>"1"}
+  [4;36;1mSite Load (0.4ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mUser Columns (2.1ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.3ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;35;1mRbac::Role Load (0.3ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mTheme Columns (1.9ms)[0m   [0mSHOW FIELDS FROM `themes`[0m
+  [4;36;1mTheme Load (0.3ms)[0m   [0;1mSELECT * FROM `themes` WHERE (`themes`.`id` = 1 AND (`themes`.site_id = 1)) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mTheme Load (0.4ms)[0m   [0;1mSELECT * FROM `themes` WHERE (theme_id LIKE 'nashrb%' and id != 1 and site_id = 1) [0m
+  [4;35;1mTheme Update (1.4ms)[0m   [0mUPDATE `themes` SET `active` = 1, `updated_at` = '2010-04-09 19:45:13' WHERE `id` = 1[0m
+
+SystemStackError (stack level too deep):
+  vendor/plugins/adva_themes/config/initializers/controllers.rb:12:in `expire_site_page_cache_without_theme_asset_clearing'
+  vendor/plugins/adva_themes/config/initializers/controllers.rb:12:in `expire_site_page_cache'
+  vendor/plugins/adva_themes/app/controllers/admin/themes_controller.rb:87:in `expire_pages_by_site!'
+  vendor/plugins/adva_themes/app/controllers/admin/themes_controller.rb:74:in `select'
+
+Rendered rescues/_trace (121.9ms)
+Rendered rescues/_request_and_response (1.8ms)
+Rendering rescues/layout (internal_server_error)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (3.0ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (0.3ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (0.4ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSection Columns (2.1ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mBlog Columns (2.3ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+
+
+Processing Admin::ThemesController#index (for 127.0.0.1 at 2010-04-09 14:45:48) [GET]
+  Parameters: {"site_id"=>"1"}
+  [4;35;1mSite Load (0.4ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mUser Columns (2.5ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.3ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [4;36;1mRbac::Role Load (0.2ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1) [0m
+Rendering template within layouts/admin
+Rendering admin/themes/index
+  [4;35;1mTheme Load (0.4ms)[0m   [0mSELECT * FROM `themes` WHERE (`themes`.site_id = 1) [0m
+  [4;36;1mTheme Columns (1.8ms)[0m   [0;1mSHOW FIELDS FROM `themes`[0m
+  [4;35;1mTheme::Preview Columns (2.0ms)[0m   [0mSHOW FIELDS FROM `theme_files`[0m
+  [4;36;1mTheme::Preview Load (0.3ms)[0m   [0;1mSELECT * FROM `theme_files` WHERE (`theme_files`.theme_id = 1) AND ( (`theme_files`.`type` = 'Theme::Preview' ) ) LIMIT 1[0m
+  [4;35;1mTheme Load (0.3ms)[0m   [0mSELECT * FROM `themes` WHERE (`themes`.`theme_id` = 'nashrb') AND (`themes`.site_id = 1) LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/themes/_theme (181.0ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSectionTranslation Load (0.4ms)[0m   [0mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;36;1mSectionTranslation Columns (10.6ms)[0m   [0;1mSHOW FIELDS FROM `section_translations`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+Rendered admin/shared/_header (7.3ms)
+Rendered shared/_flash (0.1ms)
+Completed in 341ms (View: 277, DB: 28) | 200 OK [http://localhost/admin/sites/1/themes]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSite Columns (2.8ms)[0m   [0mSHOW FIELDS FROM `sites`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mSite Load (0.2ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (0.4ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mSection Columns (2.0ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mBlog Columns (2.3ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mSection Load (0.6ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+
+
+Processing BlogArticlesController#index (for 127.0.0.1 at 2010-04-09 14:46:01) [GET]
+  Parameters: {"section_id"=>"1", "action"=>"index", "controller"=>"blog_articles"}
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mTheme Load (0.4ms)[0m   [0;1mSELECT * FROM `themes` WHERE (`themes`.site_id = 1 AND (active = 1)) [0m
+  [4;35;1mTheme Columns (1.8ms)[0m   [0mSHOW FIELDS FROM `themes`[0m
+  [4;36;1mSite Load (0.3ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mSection Load (0.3ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`id` = 1 AND (`sections`.site_id = 1)) ORDER BY lft, lft[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+  [4;36;1mArticle Columns (2.4ms)[0m   [0;1mSHOW FIELDS FROM `contents`[0m
+  [4;35;1mArticle Load (0.4ms)[0m   [0mSELECT * FROM `contents` WHERE (`contents`.section_id = 1) AND ((contents.published_at IS NOT NULL AND contents.published_at <= '2010-04-09 19:46:01') AND (`contents`.section_id = 1)) AND ( (`contents`.`type` = 'Article' ) ) ORDER BY contents.published_at DESC LIMIT 0, 30[0m
+  [4;36;1mComment Columns (1.9ms)[0m   [0;1mSHOW FIELDS FROM `comments`[0m
+  [4;35;1mUser Columns (1.9ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+Rendering template within layouts/default
+Rendering blogs/articles/index
+  [4;36;1mSection Load (0.4ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`id` = 1) ORDER BY lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`id` = 1) ORDER BY lft[0m
+  [4;36;1mSectionTranslation Load (0.3ms)[0m   [0;1mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;35;1mSectionTranslation Columns (1.6ms)[0m   [0mSHOW FIELDS FROM `section_translations`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`id` = 1) ORDER BY lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+  [4;35;1mCategory Load (0.4ms)[0m   [0mSELECT * FROM `categories` WHERE (`categories`.section_id = 1) ORDER BY lft[0m
+  [4;36;1mArticle Load (0.4ms)[0m   [0;1mSELECT * FROM `contents` WHERE (`contents`.section_id = 1) AND ((contents.published_at IS NOT NULL AND contents.published_at <= '2010-04-09 19:46:01') AND (`contents`.section_id = 1)) AND ( (`contents`.`type` = 'Article' ) ) ORDER BY contents.published_at DESC[0m
+Rendered shared/_footer (12.9ms)
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`id` = 1) ORDER BY lft[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`id` = 1) ORDER BY lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`id` = 1) ORDER BY lft[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+Rendered blogs/articles/_footer (124.2ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `section_translations` WHERE (`section_translations`.section_id = 1 AND (`section_translations`.`locale` IN ('en','root'))) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`id` = 1) ORDER BY lft[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+Rendered shared/_flash (0.2ms)
+Completed in 316ms (View: 248, DB: 21) | 200 OK [http://localhost/]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSite Columns (2.5ms)[0m   [0;1mSHOW FIELDS FROM `sites`[0m
+  [4;35;1mSQL (5.3ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mSite Load (0.3ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mSection Load (0.4ms)[0m   [0mSELECT * FROM `sections` WHERE (`sections`.site_id = 1) ORDER BY lft, lft[0m
+  [4;36;1mSection Columns (2.2ms)[0m   [0;1mSHOW FIELDS FROM `sections`[0m
+  [4;35;1mBlog Columns (2.1ms)[0m   [0mSHOW FIELDS FROM `sections`[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` LIMIT 1[0m
+  [4;36;1mSection Load (0.5ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+
+
+Processing RolesController#index to js (for 127.0.0.1 at 2010-04-09 14:46:03) [GET]
+  Parameters: {"format"=>"js", "action"=>"index", "controller"=>"roles", "user_id"=>"1", "_"=>"1270842362360"}
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT count(*) AS count_all FROM `sites` [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sites` LIMIT 1[0m
+  [4;35;1mTheme Load (0.4ms)[0m   [0mSELECT * FROM `themes` WHERE (`themes`.site_id = 1 AND (active = 1)) [0m
+  [4;36;1mTheme Columns (1.8ms)[0m   [0;1mSHOW FIELDS FROM `themes`[0m
+  [4;35;1mSite Load (0.3ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `sites` WHERE (`sites`.`id` = 1) [0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `sections` WHERE (`sections`.`parent_id` IS NULL) AND (`sections`.`site_id` = 1) ORDER BY lft LIMIT 1[0m
+  [4;35;1mUser Columns (2.2ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 1) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT id FROM contents WHERE type IN ('Page', 'Blog', 'Calendar', 'Forum', 'Album', 'Wiki') AND site_id = 1[0m
+  [4;36;1mRbac::Role Load (0.2ms)[0m   [0;1mSELECT * FROM `roles` WHERE (`roles`.user_id = 1 AND (name = 'superuser' OR
+ context_id = 1 AND context_type = 'Site' OR
+ context_id IN (NULL) AND context_type = 'Section')) [0m
+Rendering roles/index
+Completed in 121ms (View: 70, DB: 19) | 200 OK [http://localhost/users/1/roles.js?_=1270842362360]
