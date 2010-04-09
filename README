@@ -1,8 +1,0 @@
-== Welcome to NashvilleRB
-
-We are trying to build an app for the nashville rb site to be hosted. Some of the tasks that need to be completed and will be created as issues are:
-
-* The usage of S3 turned in to an appropriate plugin (right now I have it scattered as a direct modification of the plugins)
-* The usage of Heroku as a host (which requires S3) but also requires we use the #{RAILS_ROOT}/tmp directory for caching (again, I directly modified the plugins)
-* A Good Design
-

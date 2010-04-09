@@ -1,1 +1,0 @@
-Fckeditor.load!
