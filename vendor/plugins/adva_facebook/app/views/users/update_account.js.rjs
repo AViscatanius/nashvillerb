@@ -1,0 +1,6 @@
+if @user.valid?
+  page << "alert('Thanks!');Lightbox.hideAll();"
+  page << "if (window.location.href.indexOf('edit_account') != -1){window.location = '/';}"
+else
+  page << "alert('#{@user.errors.full_messages.to_sentence}. Please try again.');"  
+end

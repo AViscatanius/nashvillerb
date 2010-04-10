@@ -1,0 +1,6 @@
+
+<% if current_user.email && current_user.email.include?('proxymail.facebook.com') && (!facebook_session.user.has_permission?('email') || !facebook_session.user.has_permission?('publish_stream')) %>
+
+<%="FB.init('#{Facebooker.api_key}', window.xd_receiver_location);" %>
+
+<%end %>

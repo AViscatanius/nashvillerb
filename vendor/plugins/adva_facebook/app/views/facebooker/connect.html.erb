@@ -1,0 +1,29 @@
+<div id="fb_details">
+<% if facebook_session  %>  
+    <% if params[:logout] %>
+      <div class="fbgreybox">Logging out.</div>
+    <% end %>
+<%  else %>
+    <div class="fbgreybox">
+      Connect your 
+      <%= @site.title %>
+      account with Facebook.
+      Linking your accounts will allow you to sign in with your Facebook id.
+    </div>
+   <!-- <div class="fbconnect">
+     <fb:login-button autologoutlink="True" background="white" length="short" size="large"></fb:login-button>
+    </div> -->
+<% end %>
+</div>      
+<script type="text/javascript">
+<% if params[:logout] %>
+      function fbConnected(user_id){     
+        FB.Connect.logoutAndRedirect("/logout")         
+      }
+<% else %>
+      function fbConnected(user_id){   
+        $('fb_details').show().update('Logged in... redirecting')  
+          parent.location = '/facebooker/authenticate';              
+      }
+<% end %>
+</script>

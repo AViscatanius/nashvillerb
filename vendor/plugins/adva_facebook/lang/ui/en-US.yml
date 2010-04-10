@@ -1,0 +1,4 @@
+en:
+  fb_connected_user_msg_prompt: "Tell your friends you joined!"
+  fb_post_created_user_msg_prompt: "Tell your friends about this post:"
+  ajax_post_saving_failed: "Saving failed: {{error}} \nPlease try again."

@@ -1,0 +1,27 @@
+<%sign_in_size ||= 'normal' %>
+
+<%=fb_connect_javascript_tag %>
+<%= javascript_include_tag :fb_application %>
+
+<% javascript_tag do %>
+<%="window.xd_receiver_location = 'http://#{Facebooker.facebooker_config['callback_url']}/facebook/connect/xd_receiver.html';" %>
+<%="window.facebook_id = '#{current_user ? current_user.facebook_id : ''}';" %>
+<%="window.facebook_session = '#{facebook_session ? 'true' : 'false'}';" %>
+<%end %>
+
+<%=stylesheet_link_tag :fb_application %>
+
+<%if logged_in? %>
+  <%if current_user.email.blank? #somehow they haven't entered an e-mail address %>
+    <%=render :partial => 'users/complete_account_prompt' %>
+  <% end %>
+
+  <%if params[:facebook].eql?('connected') %>
+    <%=render :partial => 'facebooker/feed_dialog', :locals => {:type => 'connected'} %>
+  <%elsif params[:facebook].eql?('logged-in') %>
+    <%=render :partial => 'facebooker/email_permission_prompt' %>
+  <% end %>
+<% end %>
+
+
+

@@ -1,0 +1,18 @@
+
+
+
+
+
+
+
+<%= yield %>
+
+<%=javascript_tag "window.xd_receiver_location = 'http://#{Facebooker.facebooker_config['callback_url']}/xd_receiver.html'" %>
+<%=javascript_include_tag 'prototype' %>
+<%= fb_connect_javascript_tag %>
+<%= javascript_include_tag :fb_application %>
+<%= stylesheet_link_tag :fb_application %>
+
+
+
+<%=javascript_tag "FB.init('#{Facebooker.api_key}', window.xd_receiver_location, {'permsToRequestOnConnect' : 'email,publish_stream'});" %>

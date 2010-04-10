@@ -1,0 +1,5 @@
+<%if facebook_session %>
+<%= render :partial => "facebooker/feed_dialog", :locals => {:type => 'comment'} %>
+
+<%end %>
+<%= render :file => RAILS_ROOT+'/vendor/plugins/adva_facebook/app/views/comments/_comment_form.html.haml', :locals => {:commentable => commentable} %>

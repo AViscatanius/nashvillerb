@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title><%= @site.title %>: <%= controller.action_name %></title>
+    <%= theme_stylesheet_link_tag 'nashrb','reset', 'text', '960', 'application' %>
+    <%= javascript_include_tag :common, :default %>
+
+    <%= javascript_include_tag :common, :login, :cache => 'cache/admin/login' %>
+    <%= authorize_elements %>
+    <%= render :partial => 'facebooker/fb_connect' %>
+    <%= render :partial => 'facebooker/fb_require' %>
+</head>
+<body>
+
+  <div class="menu-bg">
+    <div class="container_12">
+    <div class="logo">
+    </div>
+
+      <div class="grid_12 menu">
+        <ul>
+
+          <li>
+            <%= link_to_unless_current "Home", "/" %>
+          </li>
+
+          <li>
+	        <%= link_to_unless_current('Signup', new_user_path, :id => 'signup_link') %>
+            <%# link_to_unless_current "Link2", "#Link2" %>
+          </li>
+          
+          <li>
+        	<%= link_to_unless_current('Login', login_path(:return_to => request.request_uri), :id => 'login_link') %>
+            <%# link_to_unless_current "Link3", "#Link3" %>
+          </li>
+
+
+        </ul>
+      </div>
+
+
+      <div class="clear">
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container_12 content_container">
+    <div class="count_down right">
+      21 days
+
+    </div>
+  </div>
+
+  <div class="container_12"> 
+    <div class="grid_8 content">
+      <div class="internal">
+      <p style="color: green"><%= flash[:notice] %> <div id="flashes"><%= render :partial => 'shared/flash' %></div></p>
+      <%= yield %>
+      </div>
+    </div>
+    <div class="grid_4 sidebar">
+      <div class="internal">
+		<div style="text-align: center;">
+		        <% if current_user && facebook_session && current_user.facebook_id %>
+		           <fb:profile-pic uid="<%= current_user.facebook_id%>" facebook-logo="true" size="thumb" ></fb:profile-pic>
+		            <p><a href="#" onclick='FB.Connect.logoutAndRedirect("/logout")'>Logout</a></p>
+		        <% else %>
+		           <fb:login-button v="2" size="medium" onlogin="window.location = '/facebooker/authenticate';">Login with Facebook</fb:login-button>
+		        <% end %>
+		</div>
+      </div>
+    </div>
+    <div class="clear">
+    </div>
+  </div>
+
+  <div class="container_12">
+    <div class="grid_12 footer">
+      <div class="internal">
+        Test
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+
+</body>
+</html>

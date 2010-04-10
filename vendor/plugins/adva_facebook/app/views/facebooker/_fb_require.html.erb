@@ -1,0 +1,5 @@
+<%if session[:admin_id].nil? #if admin is assuming another user's id, don't log in to facebook %>
+<script type="text/javascript">
+<%="FB.init('#{Facebooker.api_key}', '/facebook/connect/xd_receiver.html', {'permsToRequestOnConnect' : 'email,offline_access,publish_stream'});" %>
+</script>
+<%end %>

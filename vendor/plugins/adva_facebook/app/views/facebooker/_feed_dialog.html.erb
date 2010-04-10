@@ -1,0 +1,16 @@
+<%type ||= nil %>
+
+
+<%unless RAILS_ENV.eql?('test') %>
+
+<%case type
+when 'post' %>
+
+<%="FB.init('#{Facebooker.api_key}', window.xd_receiver_location);" %>
+
+
+<%when 'connected' %>
+
+<%="FB.init('#{Facebooker.api_key}', window.xd_receiver_location);" %>
+<%="CE_Facebooker.showFbFeedForm('#{:fb_connected_user_msg_prompt.l}', #{FacebookPublisher.create_connected(current_user).to_json}, function(){});" %>
+<%end %><%end %>

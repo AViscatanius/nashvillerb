@@ -1,0 +1,14 @@
+if @post.new_record? && @post.errors.any?
+  page.alert :ajax_post_saving_failed.l(:error => @post.errors.full_messages.to_sentence)
+elsif @post.is_live?
+  page << "window.post_url = '#{user_post_url(@user, @post)}'"
+  if @post.user.facebook_id && facebook_session
+    page << "CE_Facebooker.showFbFeedForm('#{:fb_post_created_user_msg_prompt.l}', #{FacebookPublisher.create_blog_post_created(@post).to_json}, function(){window.location.href = window.post_url;})"
+  else
+    page << "window.location.href = window.post_url;"
+  end
+elsif @post.is_draft?
+  page << "window.post_url = '#{edit_user_post_url(@user, @post)}'"  
+  page.alert('Saved.')
+  page << "window.location.href = window.post_url;"
+end
